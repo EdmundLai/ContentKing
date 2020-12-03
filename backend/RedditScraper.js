@@ -27,20 +27,23 @@ async function scrapeSubreddit() {
 }
 
 async function getPostsForUser(userObj) {
-  const postPromises = [];
+  const subredditPromises = [];
 
   userObj.categories.forEach((category) => {
     const subredditName = getSubredditNameFromCategory(category);
-    const promise = getSubredditTopPosts(subredditName);
+    const promise = getSubredditTopPosts(
+      subredditName,
+      category.subSubCategory
+    );
 
-    postPromises.push(promise);
+    subredditPromises.push(promise);
   });
 
-  const postsLists = await Promise.all(postPromises);
+  const categories = await Promise.all(subredditPromises);
 
   return {
     username: userObj.username,
-    posts: postsLists,
+    categories: categories,
   };
 }
 
@@ -50,7 +53,7 @@ function getSubredditNameFromCategory(category) {
   ];
 }
 
-async function getSubredditTopPosts(subredditName) {
+async function getSubredditTopPosts(subredditName, category) {
   const subreddit = await r.getSubreddit(subredditName);
 
   const topPosts = await subreddit.getTop({ time: "week", limit: 5 });
@@ -66,7 +69,10 @@ async function getSubredditTopPosts(subredditName) {
     });
   });
 
-  return data;
+  return {
+    category: category,
+    posts: data,
+  };
 }
 
 module.exports.getSubredditTopPosts = getSubredditTopPosts;
