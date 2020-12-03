@@ -56,7 +56,7 @@ function getSubredditNameFromCategory(category) {
 async function getSubredditTopPosts(subredditName, category) {
   const subreddit = await r.getSubreddit(subredditName);
 
-  const topPosts = await subreddit.getTop({ time: "week", limit: 5 });
+  const topPosts = await subreddit.getTop({ time: "week", limit: 25 });
 
   let data = [];
 

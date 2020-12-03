@@ -1,11 +1,13 @@
 import React from "react";
 
 import RequestHandler from "../RequestHandler/RequestHandler";
+import CategoryPostsContainer from "../CategoryPostsContainer/CategoryPostsContainer";
+import ContentTabs from "../ContentTabs/ContentTabs";
 
 class ContentFeed extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { data: { categories: [] } };
+    this.state = { data: null };
   }
 
   componentDidMount() {
@@ -15,27 +17,28 @@ class ContentFeed extends React.Component {
   }
 
   render() {
+    if (this.state.data == null) {
+      return <></>;
+    }
+
+    const contentList = this.state.data.categories.map(
+      (categoryPosts, index) => {
+        return (
+          <CategoryPostsContainer key={index} categoryPosts={categoryPosts} />
+        );
+      }
+    );
+
+    const categoryTitles = this.state.data.categories.map(
+      (categoryPosts) => categoryPosts.category
+    );
+
     return (
       <div className="ContentFeed">
-        <div>
-          {this.state.data.categories.map((categoryPosts) => {
-            return (
-              <div>
-                {categoryPosts.category}
-                {categoryPosts.posts.map((post) => {
-                  return (
-                    <div>
-                      {post.title}
-                      <p>
-                        <a href={post.link}>{post.link}</a>
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
-        </div>
+        <ContentTabs
+          contentList={contentList}
+          categoryTitles={categoryTitles}
+        />
       </div>
     );
   }
