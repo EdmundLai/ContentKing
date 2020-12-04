@@ -1,15 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import SimpleCard from "../SimpleCard/SimpleCard";
+import Grid from "@material-ui/core/Grid";
 
 import InfiniteScroll from "react-infinite-scroller";
 
 function CategoryPostsContainer(props) {
   const { categoryPosts, updateCallback } = props;
 
+  const [contentAvailable, setContentAvailable] = useState(true);
+
   async function loadMoreContent() {
-    await updateCallback(categoryPosts.category);
-    //const categoryObj = RequestHandler.getMorePosts(category);
-    //setCategoryPosts(categoryObj);
+    const morePostsLoaded = await updateCallback(categoryPosts.category);
+
+    setContentAvailable(morePostsLoaded);
   }
 
   const loader = (
@@ -23,18 +26,18 @@ function CategoryPostsContainer(props) {
       <InfiniteScroll
         pageStart={0}
         loadMore={loadMoreContent}
-        hasMore={true}
+        hasMore={contentAvailable}
         loader={loader}
       >
-        {categoryPosts.posts.map((post, index) => {
-          return (
-            <SimpleCard
-              key={index}
-              cardTitle={post.title}
-              cardLink={post.link}
-            />
-          );
-        })}
+        <Grid container spacing={3}>
+          {categoryPosts.posts.map((post, index) => {
+            return (
+              <Grid item xs={12} sm={6} lg={4} xl={3}>
+                <SimpleCard key={index} post={post} />
+              </Grid>
+            );
+          })}
+        </Grid>
       </InfiniteScroll>
     </div>
   );

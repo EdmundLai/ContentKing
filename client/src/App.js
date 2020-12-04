@@ -1,6 +1,5 @@
 //import logo from "./logo.svg";
 import React from "react";
-import "./App.css";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -28,13 +27,18 @@ class App extends React.Component {
   async updateStateFromScroll(category) {
     const categoryPosts = await RequestHandler.getMorePosts(category);
 
+    let updated = true;
+
     this.setState((prevState) => {
       let newData = Object.assign({}, prevState.data);
-      // console.log(categoryPosts);
-      // console.log(newData);
+
       const index = prevState.data.categories.findIndex(
         (categoryObj) => categoryObj.category === category
       );
+
+      if (prevState.data.categories[index].length === categoryPosts.length) {
+        updated = false;
+      }
 
       newData.categories[index] = categoryPosts;
 
@@ -42,6 +46,8 @@ class App extends React.Component {
         data: newData,
       };
     });
+
+    return updated;
   }
 
   render() {
@@ -50,7 +56,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <CssBaseline />
-        <Container minWidth="sm">
+        <Container minWidth="sm" maxWidth="xl">
           <ContentFeed
             data={this.state.data}
             updateCallback={this.updateStateFromScroll}

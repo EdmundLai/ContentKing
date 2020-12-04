@@ -25,7 +25,7 @@ async function scrapeSubreddit() {
     });
   });
 
-  console.log(data);
+  //console.log(data);
 }
 
 async function getPostsForUser(userObj) {
@@ -57,14 +57,17 @@ function getSubredditNameFromCategory(category) {
 
 async function getSubredditTopPosts(subredditName, category) {
   const subreddit = r.getSubreddit(subredditName);
-  const listing = await subreddit.getTop({ time: "week", limit: 25 });
+  const listing = await subreddit.getTop({ time: "week", limit: 30 });
 
   //console.log(typeof listing);
 
   let data = [];
 
   listing.forEach((post) => {
+    //console.log(post);
     data.push({
+      thumbnail: post.thumbnail,
+      permalink: post.permalink,
       link: post.url,
       title: post.title,
       score: post.score,

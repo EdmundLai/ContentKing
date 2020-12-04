@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SimpleTabs(props) {
+export default function ContentTabs(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -60,11 +60,7 @@ export default function SimpleTabs(props) {
   return (
     <div className={classes.root}>
       <AppBar position="static">
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="simple tabs example"
-        >
+        <Tabs value={value} onChange={handleChange} aria-label="content tabs">
           {categoryTitles.map((title, index) => {
             return <Tab key={index} label={title} {...a11yProps(index)} />;
           })}

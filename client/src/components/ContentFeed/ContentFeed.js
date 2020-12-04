@@ -10,7 +10,7 @@ class ContentFeed extends React.Component {
     if (data == null) {
       return <></>;
     }
-    console.log(data);
+    //console.log(data);
 
     const contentList = data.categories.map((categoryPosts, index) => {
       return (
