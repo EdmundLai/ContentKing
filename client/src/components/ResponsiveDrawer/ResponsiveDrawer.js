@@ -1,5 +1,4 @@
 import React from "react";
-//import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -55,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ResponsiveDrawer(props) {
-  const { window } = props;
+  const { window, postData } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -64,23 +63,37 @@ function ResponsiveDrawer(props) {
     setMobileOpen(!mobileOpen);
   };
 
+  //console.log(postData);
+
+  let username = "John Smith";
+  let categories = [];
+
+  if (postData !== null && typeof postData !== "undefined") {
+    username = postData.username;
+    categories = postData.categories;
+    // console.log(username);
+    // console.log(categories);
+  }
+
+  const categoryNames = categories.map((categoryObj) => categoryObj.category);
+
+  //   console.log(categoryNames);
+
   const drawer = (
     <div>
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {["Egg"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary={username} />
+        </ListItem>
       </List>
       <Divider />
       <List>
-        {["Javascript", "CS:GO", "Genshin Impact"].map((text, index) => (
+        {categoryNames.map((text, index) => (
           <ListItem button key={text}>
             <ListItemIcon>
               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
@@ -147,18 +160,10 @@ function ResponsiveDrawer(props) {
       </nav>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <ContentFeed />
+        <ContentFeed data={postData} />
       </main>
     </div>
   );
 }
-
-// ResponsiveDrawer.propTypes = {
-//   /**
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-//    */
-//   window: PropTypes.func,
-// };
 
 export default ResponsiveDrawer;

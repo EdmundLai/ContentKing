@@ -15,6 +15,15 @@ app.get("/user0", async (req, res) => {
   res.send(userFeed);
 });
 
+app.get("/fetchmore", async (req, res) => {
+  const category = req.query.category;
+
+  const data = await scraper.fetchMorePosts(category);
+
+  res.send(data);
+  //await scraper.
+});
+
 app.get("/csgo", async (req, res) => {
   const data = await scraper.getSubredditTopPosts("globaloffensive");
 

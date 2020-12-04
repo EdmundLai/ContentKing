@@ -9,6 +9,8 @@ const r = new snoowrap({
   password: process.env.REDDIT_PASSWORD,
 });
 
+const listingsDict = {};
+
 async function scrapeSubreddit() {
   const subreddit = await r.getSubreddit("realEstate");
   const topPosts = await subreddit.getTop({ time: "week", limit: 3 });
@@ -54,13 +56,43 @@ function getSubredditNameFromCategory(category) {
 }
 
 async function getSubredditTopPosts(subredditName, category) {
-  const subreddit = await r.getSubreddit(subredditName);
+  const subreddit = r.getSubreddit(subredditName);
+  const listing = await subreddit.getTop({ time: "week", limit: 25 });
 
-  const topPosts = await subreddit.getTop({ time: "week", limit: 25 });
+  //console.log(typeof listing);
 
   let data = [];
 
-  topPosts.forEach((post) => {
+  listing.forEach((post) => {
+    data.push({
+      link: post.url,
+      title: post.title,
+      score: post.score,
+      text: post.selftext,
+    });
+
+    //console.log("top posts before exiting getTopPosts");
+    //console.log(typeof listingsDict[category]);
+  });
+
+  listingsDict[category] = listing;
+
+  //console.log(data);
+  //console.log("top posts loaded!");
+
+  return {
+    category: category,
+    posts: data,
+  };
+}
+
+async function fetchMorePosts(category) {
+  const listing = listingsDict[category];
+
+  let data = [];
+
+  const moreTopPosts = await listing.fetchMore({ amount: 25 });
+  moreTopPosts.forEach((post) => {
     data.push({
       link: post.url,
       title: post.title,
@@ -68,6 +100,10 @@ async function getSubredditTopPosts(subredditName, category) {
       text: post.selftext,
     });
   });
+
+  listingsDict[category] = moreTopPosts;
+
+  //console.log("more posts fetched!");
 
   return {
     category: category,
@@ -78,3 +114,5 @@ async function getSubredditTopPosts(subredditName, category) {
 module.exports.getSubredditTopPosts = getSubredditTopPosts;
 
 module.exports.getPostsForUser = getPostsForUser;
+
+module.exports.fetchMorePosts = fetchMorePosts;
