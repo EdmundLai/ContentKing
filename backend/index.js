@@ -10,9 +10,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/user0", async (req, res) => {
-  const userFeed = await scraper.getPostsForUser(userData.users[0]);
+  const testUserObj = scraper.findUserData(userData, "Egg");
 
-  res.send(userFeed);
+  if (testUserObj == null) {
+    res.status(404).send("User data cannot be found");
+  } else {
+    const userFeed = await scraper.getPostsForUser(testUserObj);
+
+    res.send(userFeed);
+  }
 });
 
 app.get("/fetchmore", async (req, res) => {

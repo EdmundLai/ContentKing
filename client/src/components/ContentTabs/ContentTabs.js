@@ -7,6 +7,8 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
+import SimpleMenu from "../SimpleMenu/SimpleMenu";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -45,6 +47,11 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  appBar: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 }));
 
 export default function ContentTabs(props) {
@@ -59,12 +66,13 @@ export default function ContentTabs(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar className={classes.appBar} position="static">
         <Tabs value={value} onChange={handleChange} aria-label="content tabs">
           {categoryTitles.map((title, index) => {
             return <Tab key={index} label={title} {...a11yProps(index)} />;
           })}
         </Tabs>
+        <SimpleMenu />
       </AppBar>
 
       {contentList.map((content, index) => {

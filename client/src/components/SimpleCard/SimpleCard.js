@@ -54,6 +54,7 @@ export default function SimpleCard(props) {
 
   const cardTitle = post.title;
   const cardLink = post.link;
+
   //const redditLink = `https://www.reddit.com${post.permalink}`;
 
   function checkURLIsImg(url) {

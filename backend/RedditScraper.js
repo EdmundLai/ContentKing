@@ -28,6 +28,19 @@ async function scrapeSubreddit() {
   //console.log(data);
 }
 
+function findUserData(usersContainer, username) {
+  const usersArray = usersContainer.users;
+
+  for (let i = 0; i < usersArray.length; i++) {
+    const userObj = usersArray[i];
+    if (userObj.username === username) {
+      return userObj;
+    }
+  }
+
+  return null;
+}
+
 async function getPostsForUser(userObj) {
   const subredditPromises = [];
 
@@ -119,3 +132,5 @@ module.exports.getSubredditTopPosts = getSubredditTopPosts;
 module.exports.getPostsForUser = getPostsForUser;
 
 module.exports.fetchMorePosts = fetchMorePosts;
+
+module.exports.findUserData = findUserData;
