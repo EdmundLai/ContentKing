@@ -36,6 +36,15 @@ class App extends React.Component {
         (categoryObj) => categoryObj.category === category
       );
 
+      // some error occurred with the fetch more command
+      if (categoryPosts == null) {
+        console.error(
+          "Reddit api was unable to fetch any more posts from the listing."
+        );
+        updated = false;
+        return { data: prevState.data };
+      }
+
       if (prevState.data.categories[index].length === categoryPosts.length) {
         updated = false;
       }

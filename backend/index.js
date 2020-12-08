@@ -5,6 +5,10 @@ const port = 5000;
 const scraper = require("./RedditScraper");
 const { userData } = require("./user_prefs");
 
+const { initializeDb, closeDb } = require("./createContentDb");
+
+let dbConn = null;
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -42,6 +46,14 @@ app.get("/csharp", async (req, res) => {
   res.send(data);
 });
 
-app.listen(port, () => {
+process.on("SIGTERM", shutDown);
+process.on("SIGINT", shutDown);
+
+app.listen(port, async () => {
+  dbConn = await initializeDb();
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
+function shutDown() {
+  closeDb(dbConn);
+}

@@ -11,22 +11,22 @@ const r = new snoowrap({
 
 const listingsDict = {};
 
-async function scrapeSubreddit() {
-  const subreddit = await r.getSubreddit("realEstate");
-  const topPosts = await subreddit.getTop({ time: "week", limit: 3 });
+// async function scrapeSubreddit() {
+//   const subreddit = await r.getSubreddit("realEstate");
+//   const topPosts = await subreddit.getTop({ time: "week", limit: 3 });
 
-  let data = [];
+//   let data = [];
 
-  topPosts.forEach((post) => {
-    data.push({
-      link: post.url,
-      text: post.title,
-      score: post.score,
-    });
-  });
+//   topPosts.forEach((post) => {
+//     data.push({
+//       link: post.url,
+//       text: post.title,
+//       score: post.score,
+//     });
+//   });
 
-  //console.log(data);
-}
+//   //console.log(data);
+// }
 
 function findUserData(usersContainer, username) {
   const usersArray = usersContainer.users;
@@ -106,6 +106,10 @@ async function fetchMorePosts(category) {
   const listing = listingsDict[category];
 
   let data = [];
+
+  if (typeof listing == "undefined") {
+    return null;
+  }
 
   const moreTopPosts = await listing.fetchMore({ amount: 25 });
   moreTopPosts.forEach((post) => {
