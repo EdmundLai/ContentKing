@@ -65,20 +65,21 @@ async function insertSampleSubreddits() {
   // console.log("inside insertSampleSubreddits");
 
   Object.keys(categories).forEach((mainCategory) => {
-    Object.keys(categories[mainCategory]).forEach((subCategory) => {
-      Object.keys(categories[mainCategory][subCategory]).forEach(
-        async (topicName) => {
-          const subredditName =
-            categories[mainCategory][subCategory][topicName];
+    const mainCategoryObj = categories[mainCategory];
 
-          await insertSubreddit(
-            topicName,
-            mainCategory,
-            subCategory,
-            subredditName
-          );
-        }
-      );
+    Object.keys(mainCategoryObj).forEach((subCategory) => {
+      const subCategoryObj = mainCategoryObj[subCategory];
+
+      Object.keys(subCategoryObj).forEach(async (topicName) => {
+        const subredditName = subCategoryObj[topicName];
+
+        await insertSubreddit(
+          topicName,
+          mainCategory,
+          subCategory,
+          subredditName
+        );
+      });
     });
   });
 }
