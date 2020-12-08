@@ -1,6 +1,8 @@
 const snoowrap = require("snoowrap");
 const { categories } = require("./reddit_categories");
 
+const { getUserSubRedditsFromUsername } = require("./dbManager");
+
 const r = new snoowrap({
   userAgent: process.env.USER_AGENT,
   clientId: process.env.CLIENT_ID,
@@ -28,27 +30,54 @@ const listingsDict = {};
 //   //console.log(data);
 // }
 
-function findUserData(usersContainer, username) {
-  const usersArray = usersContainer.users;
+// function findUserData(usersContainer, username) {
+//   const usersArray = usersContainer.users;
 
-  for (let i = 0; i < usersArray.length; i++) {
-    const userObj = usersArray[i];
-    if (userObj.username === username) {
-      return userObj;
-    }
-  }
+//   for (let i = 0; i < usersArray.length; i++) {
+//     const userObj = usersArray[i];
+//     if (userObj.username === username) {
+//       return userObj;
+//     }
+//   }
 
-  return null;
-}
+//   return null;
+// }
 
-async function getPostsForUser(userObj) {
+// async function getPostsForUser(userObj) {
+//   const subredditPromises = [];
+
+//   userObj.categories.forEach((category) => {
+//     const subredditName = getSubredditNameFromCategory(category);
+//     const promise = getSubredditTopPosts(
+//       subredditName,
+//       category.subSubCategory
+//     );
+
+//     subredditPromises.push(promise);
+//   });
+
+//   const categories = await Promise.all(subredditPromises);
+
+//   return {
+//     username: userObj.username,
+//     categories: categories,
+//   };
+// }
+
+async function getPostsForUserFromDb(username) {
   const subredditPromises = [];
 
-  userObj.categories.forEach((category) => {
-    const subredditName = getSubredditNameFromCategory(category);
+  // array will be empty if username cannot be found
+  const subredditsArr = await getUserSubRedditsFromUsername(username);
+
+  if (subredditsArr.length === 0) {
+    return null;
+  }
+
+  subredditsArr.forEach((subredditObj) => {
     const promise = getSubredditTopPosts(
-      subredditName,
-      category.subSubCategory
+      subredditObj.subreddit_name,
+      subredditObj.topic_name
     );
 
     subredditPromises.push(promise);
@@ -57,16 +86,16 @@ async function getPostsForUser(userObj) {
   const categories = await Promise.all(subredditPromises);
 
   return {
-    username: userObj.username,
+    username: username,
     categories: categories,
   };
 }
 
-function getSubredditNameFromCategory(category) {
-  return categories[category.mainCategory][category.subCategory][
-    category.subSubCategory
-  ];
-}
+// function getSubredditNameFromCategory(category) {
+//   return categories[category.mainCategory][category.subCategory][
+//     category.subSubCategory
+//   ];
+// }
 
 async function getSubredditTopPosts(subredditName, category) {
   const subreddit = r.getSubreddit(subredditName);
@@ -133,8 +162,10 @@ async function fetchMorePosts(category) {
 
 module.exports.getSubredditTopPosts = getSubredditTopPosts;
 
-module.exports.getPostsForUser = getPostsForUser;
+//module.exports.getPostsForUser = getPostsForUser;
 
 module.exports.fetchMorePosts = fetchMorePosts;
 
-module.exports.findUserData = findUserData;
+//module.exports.findUserData = findUserData;
+
+module.exports.getPostsForUserFromDb = getPostsForUserFromDb;

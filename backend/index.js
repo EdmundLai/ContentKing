@@ -3,9 +3,8 @@ require("dotenv").config();
 const app = express();
 const port = 5000;
 const scraper = require("./RedditScraper");
-const { userData } = require("./user_prefs");
 
-const { initializeDb, closeDb } = require("./createContentDb");
+const dbManager = require("./dbManager");
 
 let dbConn = null;
 
@@ -13,13 +12,30 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/user0", async (req, res) => {
-  const testUserObj = scraper.findUserData(userData, "Egg");
+// app.get("/user0", async (req, res) => {
+//   const testUserObj = scraper.findUserData(userData, "Egg");
 
-  if (testUserObj == null) {
+//   if (testUserObj == null) {
+//     res.status(404).send("User data cannot be found");
+//   } else {
+//     const userFeed = await scraper.getPostsForUser(testUserObj);
+
+//     res.send(userFeed);
+//   }
+// });
+
+app.get("/user0db", async (req, res) => {
+  const username = "Egg";
+  //const testUserObj = scraper.findUserData(userData, username);
+
+  const userId = dbManager.getUserIdByLogin(username);
+
+  if (typeof userId == "undefined") {
     res.status(404).send("User data cannot be found");
   } else {
-    const userFeed = await scraper.getPostsForUser(testUserObj);
+    //const userFeed = await scraper.getPostsForUser(testUserObj);
+
+    const userFeed = await scraper.getPostsForUserFromDb(username);
 
     res.send(userFeed);
   }
@@ -50,10 +66,10 @@ process.on("SIGTERM", shutDown);
 process.on("SIGINT", shutDown);
 
 app.listen(port, async () => {
-  dbConn = await initializeDb();
+  dbConn = await dbManager.initializeDb();
   console.log(`Example app listening at http://localhost:${port}`);
 });
 
 function shutDown() {
-  closeDb(dbConn);
+  dbManager.closeDb(dbConn);
 }

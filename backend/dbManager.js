@@ -171,10 +171,15 @@ async function insertSubreddit(
 }
 
 async function insertUserSubredditByLoginAndTopic(username, topic) {
-  const user_id = await getUserIdByLogin(username);
-  const subreddit_id = await getSubredditIdByTopic(topic);
+  const userIdObj = await getUserIdByLogin(username);
 
-  await insertUserSubreddit(user_id, subreddit_id);
+  if (typeof userIdObj !== "undefined") {
+    const subreddit_id = await getSubredditIdByTopic(topic);
+
+    const user_id = userIdObj.user_id;
+
+    await insertUserSubreddit(user_id, subreddit_id);
+  }
 }
 
 function getSubredditIdByTopic(subredditName) {
@@ -196,7 +201,7 @@ function getSubredditIdByTopic(subredditName) {
   });
 }
 
-function getUserIdByLogin(username) {
+async function getUserIdByLogin(username) {
   return new Promise((resolve, reject) => {
     var sql = "SELECT user_id ";
     sql += "FROM Users ";
@@ -206,12 +211,51 @@ function getUserIdByLogin(username) {
       if (error) {
         reject(error);
       }
+      // console.log(username);
       // console.error("User_id");
       // console.error(row.user_id);
 
-      resolve(row.user_id);
+      // returns undefined if username cannot be found
+
+      resolve(row);
     });
   });
+}
+
+async function getSubredditNamesFromUserId(userId) {
+  return new Promise((resolve, reject) => {
+    var sql =
+      "SELECT topic_name, subreddit_name from Subreddits WHERE subreddit_id IN (SELECT subreddit_id ";
+    sql += "FROM UserSubreddits ";
+    sql += "WHERE user_id = ?) ";
+
+    db.all(sql, userId, function (error, rows) {
+      if (error) {
+        reject(error);
+      }
+      // console.error("User_id");
+      // console.error(row.user_id);
+
+      resolve(rows);
+    });
+  });
+}
+
+async function getUserSubRedditsFromUsername(username) {
+  const userIdObj = await getUserIdByLogin(username);
+
+  // returns empty array if user cannot be found
+  if (typeof userIdObj == "undefined") {
+    return [];
+  }
+
+  const userId = userIdObj.user_id;
+
+  const rows = await getSubredditNamesFromUserId(userId);
+
+  //console.log(rows);
+
+  return rows;
 }
 
 function insertUserSubreddit(userId, subredditId) {
@@ -264,5 +308,9 @@ function initializeTables() {
 }
 
 module.exports.initializeDb = initializeDb;
+
+module.exports.getUserIdByLogin = getUserIdByLogin;
+
+module.exports.getUserSubRedditsFromUsername = getUserSubRedditsFromUsername;
 
 module.exports.closeDb = closeDb;

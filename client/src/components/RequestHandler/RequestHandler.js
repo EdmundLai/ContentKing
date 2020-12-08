@@ -1,7 +1,7 @@
 var axios = require("axios");
 
 async function getTestUsersPosts() {
-  const res = await axios.get("/user0");
+  const res = await axios.get("/user0db");
   return res.data;
 }
 

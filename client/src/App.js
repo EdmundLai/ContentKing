@@ -21,6 +21,12 @@ class App extends React.Component {
   async componentDidMount() {
     const data = await RequestHandler.getTestUsersPosts();
 
+    if (data == null) {
+      console.error(
+        "Data from reddit api is invalid. Username may be incorrect."
+      );
+    }
+
     this.setState({ data: data });
   }
 
