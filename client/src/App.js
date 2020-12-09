@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import ContentFeed from "./components/ContentFeed/ContentFeed";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import RequestHandler from "./components/RequestHandler/RequestHandler";
 
+import AuthenticatedApp from "./components/AuthenticatedApp/AuthenticatedApp";
+import UnauthenticatedApp from "./components/UnauthenticatedApp/UnauthenticatedApp";
+
 function App() {
   const [data, setData] = useState(null);
-  //const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   useEffect(() => {
     fetchPosts();
@@ -64,25 +65,21 @@ function App() {
     return updated;
   }
 
+  const AppContent = loggedIn ? (
+    <AuthenticatedApp
+      data={data}
+      updateCallback={updateStateFromScroll}
+      setLoggedIn={setLoggedIn}
+    />
+  ) : (
+    <UnauthenticatedApp setLoggedIn={setLoggedIn} />
+  );
+
   return (
     <Router>
       <div className="App">
         <CssBaseline />
-        <Container minWidth="sm" maxWidth="xl">
-          <Switch>
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <ContentFeed
-                  {...props}
-                  data={data}
-                  updateCallback={updateStateFromScroll}
-                />
-              )}
-            />
-          </Switch>
-        </Container>
+        {AppContent}
       </div>
     </Router>
   );
