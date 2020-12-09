@@ -1,44 +1,45 @@
-//import logo from "./logo.svg";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-//import ResponsiveDrawer from "./components/ResponsiveDrawer/ResponsiveDrawer";
 import ContentFeed from "./components/ContentFeed/ContentFeed";
 
 import RequestHandler from "./components/RequestHandler/RequestHandler";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
+function App() {
+  const [data, setData] = useState(null);
+  //const [loggedIn, setLoggedIn] = useState(false);
 
-    this.state = { data: null };
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
-    this.updateStateFromScroll = this.updateStateFromScroll.bind(this);
-  }
+  async function fetchPosts() {
+    const newPosts = await RequestHandler.getTestUsersPosts();
 
-  async componentDidMount() {
-    const data = await RequestHandler.getTestUsersPosts();
-
-    if (data == null) {
+    if (newPosts == null) {
       console.error(
         "Data from reddit api is invalid. Username may be incorrect."
       );
     }
+    // console.log("newPosts");
+    // console.log(newPosts);
 
-    this.setState({ data: data });
+    setData(newPosts);
   }
 
-  async updateStateFromScroll(category) {
+  async function updateStateFromScroll(category) {
     const categoryPosts = await RequestHandler.getMorePosts(category);
 
     let updated = true;
 
-    this.setState((prevState) => {
-      let newData = Object.assign({}, prevState.data);
+    setData((prevData) => {
+      //console.error(prevData);
+      let newData = Object.assign({}, prevData);
 
-      const index = prevState.data.categories.findIndex(
+      const index = prevData.categories.findIndex(
         (categoryObj) => categoryObj.category === category
       );
 
@@ -48,38 +49,43 @@ class App extends React.Component {
           "Reddit api was unable to fetch any more posts from the listing."
         );
         updated = false;
-        return { data: prevState.data };
+        return prevData;
       }
 
-      if (prevState.data.categories[index].length === categoryPosts.length) {
+      if (prevData.categories[index].length === categoryPosts.length) {
         updated = false;
       }
 
       newData.categories[index] = categoryPosts;
 
-      return {
-        data: newData,
-      };
+      return newData;
     });
 
     return updated;
   }
 
-  render() {
-    //console.log(this.state.data);
-
-    return (
+  return (
+    <Router>
       <div className="App">
         <CssBaseline />
         <Container minWidth="sm" maxWidth="xl">
-          <ContentFeed
-            data={this.state.data}
-            updateCallback={this.updateStateFromScroll}
-          />
+          <Switch>
+            <Route
+              exact
+              path="/"
+              render={(props) => (
+                <ContentFeed
+                  {...props}
+                  data={data}
+                  updateCallback={updateStateFromScroll}
+                />
+              )}
+            />
+          </Switch>
         </Container>
       </div>
-    );
-  }
+    </Router>
+  );
 }
 
 export default App;

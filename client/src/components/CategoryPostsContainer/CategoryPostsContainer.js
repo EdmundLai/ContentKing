@@ -21,6 +21,8 @@ function CategoryPostsContainer(props) {
     </div>
   );
 
+  //console.log(categoryPosts);
+
   return (
     <div className="CategoryPostsContainer">
       <InfiniteScroll

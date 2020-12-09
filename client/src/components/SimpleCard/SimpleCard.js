@@ -5,8 +5,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-import styles from "./SimpleCard.module.css";
-
 var GifPlayer = require("react-gif-player");
 
 const useStyles = makeStyles({
@@ -44,6 +42,9 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
+  gifPlayer: {
+    maxWidth: "100%",
+  },
 });
 
 export default function SimpleCard(props) {
@@ -68,7 +69,7 @@ export default function SimpleCard(props) {
   let linkContent = <></>;
 
   if (checkURLIsGif(cardLink)) {
-    linkContent = <GifPlayer className={styles.GifPlayer} gif={cardLink} />;
+    linkContent = <GifPlayer className={classes.gifPlayer} gif={cardLink} />;
   } else if (checkURLIsImg(cardLink)) {
     linkContent = (
       <Box className={classes.imageContainer}>
