@@ -11,7 +11,7 @@ import UnauthenticatedApp from "./components/UnauthenticatedApp/UnauthenticatedA
 
 function App() {
   const [data, setData] = useState(null);
-  const [loggedIn, setLoggedIn] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     fetchPosts();

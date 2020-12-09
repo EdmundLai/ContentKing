@@ -2,8 +2,18 @@ import React from "react";
 
 import ButtonAppBar from "../ButtonAppBar/ButtonAppBar";
 
-export default function LoggedOutAppBar(props) {
-  const { logInCallback } = props;
+import { useHistory } from "react-router-dom";
 
-  return <ButtonAppBar buttonText="Login" buttonHandler={logInCallback} />;
+export default function LoggedOutAppBar(props) {
+  //const { logInCallback } = props;
+
+  const history = useHistory();
+
+  function redirectToLoginPage() {
+    history.push("/login");
+  }
+
+  return (
+    <ButtonAppBar buttonText="Login" buttonHandler={redirectToLoginPage} />
+  );
 }

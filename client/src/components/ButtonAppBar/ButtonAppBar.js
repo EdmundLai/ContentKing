@@ -4,6 +4,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 // import IconButton from "@material-ui/core/IconButton";
 // import MenuIcon from "@material-ui/icons/Menu";
 
@@ -15,6 +16,10 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  link: {
+    textDecoration: "inherit",
+    color: "inherit",
   },
 }));
 
@@ -31,7 +36,9 @@ export default function ButtonAppBar(props) {
         <Toolbar>
           {menuObj}
           <Typography variant="h6" className={classes.title}>
-            RCA
+            <Link className={classes.link} to="/">
+              Content King
+            </Link>
           </Typography>
           <Button onClick={buttonHandler} color="inherit">
             {buttonText}
