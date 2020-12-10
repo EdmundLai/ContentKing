@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +14,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
 import { Link } from "react-router-dom";
+
+import RequestHandler from "../RequestHandler/RequestHandler";
 
 function Copyright() {
   return (
@@ -48,6 +50,28 @@ const useStyles = makeStyles((theme) => ({
 export default function SignUp() {
   const classes = useStyles();
 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  function handleSubmit(event) {
+    // for debugging
+    // it works!
+    // console.log(username);
+    // console.log(password);
+
+    RequestHandler.insertUser(username, password);
+
+    event.preventDefault();
+  }
+
+  function handleUsernameChange(event) {
+    setUsername(event.target.value);
+  }
+
+  function handlePasswordChange(event) {
+    setPassword(event.target.value);
+  }
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -58,7 +82,7 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -68,6 +92,8 @@ export default function SignUp() {
                 id="username"
                 label="Username"
                 name="username"
+                onChange={handleUsernameChange}
+                value={username}
               />
             </Grid>
             <Grid item xs={12}>
@@ -80,6 +106,8 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={handlePasswordChange}
+                value={password}
               />
             </Grid>
           </Grid>

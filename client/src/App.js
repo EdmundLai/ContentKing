@@ -14,7 +14,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    fetchPosts();
+    //fetchPosts();
   }, []);
 
   async function fetchPosts() {

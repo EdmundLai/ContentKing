@@ -5,7 +5,7 @@ const sqlite3 = require("sqlite3").verbose();
 const DB_PATH = "./db/content.db";
 
 const { categories } = require("./reddit_categories");
-const { userData } = require("./user_prefs");
+//const { userData } = require("./user_prefs");
 
 // open database in memory
 let db = initializeDbConnection();
@@ -47,21 +47,12 @@ function initializeDbConnection() {
   return db;
 }
 
-async function insertSampleUsers() {
-  await registerUser("Egg", "Kappa123");
-  await registerUser("Bacon", "AYAYA123");
-}
+// async function insertSampleUsers() {
+//   await registerUser("Egg", "Kappa123");
+//   await registerUser("Bacon", "AYAYA123");
+// }
 
 async function insertSampleSubreddits() {
-  // await insertSubreddit("Javascript", "programming", "languages", "javascript");
-  // await insertSubreddit("Genshin Impact", "gaming", "games", "Genshin_Impact");
-  // await insertSubreddit(
-  //   "Counterstrike: Global Offensive",
-  //   "gaming",
-  //   "games",
-  //   "GlobalOffensive"
-  // );
-
   // console.log("inside insertSampleSubreddits");
 
   Object.keys(categories).forEach((mainCategory) => {
@@ -84,37 +75,41 @@ async function insertSampleSubreddits() {
   });
 }
 
-async function insertSampleUserSubreddits() {
-  // await insertUserSubredditByLoginAndTopic("Egg", "Javascript");
-  // await insertUserSubredditByLoginAndTopic(
-  //   "Egg",
-  //   "Counterstrike: Global Offensive"
-  // );
-  // await insertUserSubredditByLoginAndTopic("Egg", "Genshin Impact");
-  userData.users.forEach((userObj) => {
-    const username = userObj.username;
-    userObj.categories.forEach(async (categoryObj) => {
-      const topicName = categoryObj.subSubCategory;
-      await insertUserSubredditByLoginAndTopic(username, topicName);
-    });
-  });
-}
+// async function insertSampleUserSubreddits() {
+//   // await insertUserSubredditByLoginAndTopic("Egg", "Javascript");
+//   // await insertUserSubredditByLoginAndTopic(
+//   //   "Egg",
+//   //   "Counterstrike: Global Offensive"
+//   // );
+//   // await insertUserSubredditByLoginAndTopic("Egg", "Genshin Impact");
+
+//   userData.users.forEach((userObj) => {
+//     const username = userObj.username;
+//     userObj.categories.forEach(async (categoryObj) => {
+//       const topicName = categoryObj.subSubCategory;
+//       await insertUserSubredditByLoginAndTopic(username, topicName);
+//     });
+//   });
+// }
 
 async function initializeDbWithSampleData() {
-  const usersEmpty = await checkIfTableIsEmpty("Users");
-  if (usersEmpty) {
-    await insertSampleUsers();
-  }
+  // we want to create users dynamically, not seed them
+
+  // const usersEmpty = await checkIfTableIsEmpty("Users");
+  // if (usersEmpty) {
+  //   await insertSampleUsers();
+  // }
 
   const subredditsEmpty = await checkIfTableIsEmpty("Subreddits");
   if (subredditsEmpty) {
     await insertSampleSubreddits();
   }
 
-  const userSubredditsEmpty = await checkIfTableIsEmpty("UserSubreddits");
-  if (userSubredditsEmpty) {
-    await insertSampleUserSubreddits();
-  }
+  // user subreddits will be created as user adds them to the list
+  // const userSubredditsEmpty = await checkIfTableIsEmpty("UserSubreddits");
+  // if (userSubredditsEmpty) {
+  //   await insertSampleUserSubreddits();
+  // }
 }
 
 async function registerUser(username, password) {
@@ -202,6 +197,7 @@ function getSubredditIdByTopic(subredditName) {
   });
 }
 
+// can be used to check if username exists in the database
 async function getUserIdByLogin(username) {
   return new Promise((resolve, reject) => {
     var sql = "SELECT user_id ";
@@ -287,7 +283,7 @@ function initializeTables() {
         CREATE TABLE IF NOT EXISTS Users (
             user_id integer NOT NULL PRIMARY KEY,
             username text NOT NULL UNIQUE,
-            password text NOT NULL
+            password char(60) NOT NULL
         );
         
         CREATE TABLE IF NOT EXISTS UserSubreddits (
@@ -313,5 +309,7 @@ module.exports.initializeDb = initializeDb;
 module.exports.getUserIdByLogin = getUserIdByLogin;
 
 module.exports.getUserSubRedditsFromUsername = getUserSubRedditsFromUsername;
+
+module.exports.registerUser = registerUser;
 
 module.exports.closeDb = closeDb;

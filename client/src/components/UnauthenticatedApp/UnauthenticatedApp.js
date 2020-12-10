@@ -9,7 +9,7 @@ import WelcomePage from "../WelcomePage/WelcomePage";
 //import ContentFeed from "../ContentFeed/ContentFeed";
 
 // need to create login page as well as create an account page
-// routes should be /login and /newaccount
+// routes are /login and /newaccount
 
 import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignUp/SignUp";
@@ -32,7 +32,6 @@ export default function UnauthenticatedApp(props) {
           <SignUp />
         </Route>
         <Route exact path="/">
-          {/* <WelcomePage /> */}
           <WelcomePage />
         </Route>
       </Switch>
