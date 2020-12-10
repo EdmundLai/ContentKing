@@ -12,6 +12,7 @@ import UnauthenticatedApp from "./components/UnauthenticatedApp/UnauthenticatedA
 function App() {
   const [data, setData] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
     //fetchPosts();
@@ -72,7 +73,7 @@ function App() {
       setLoggedIn={setLoggedIn}
     />
   ) : (
-    <UnauthenticatedApp setLoggedIn={setLoggedIn} />
+    <UnauthenticatedApp setLoggedIn={setLoggedIn} setUsername={setUsername} />
   );
 
   return (

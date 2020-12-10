@@ -32,8 +32,23 @@ async function insertUser(username, password) {
     });
 }
 
+async function authenticateUser(username, password) {
+  return axios
+    .get("/api/checkcredentials", {
+      params: {
+        username: username,
+        password: password,
+      },
+    })
+    .then((res) => {
+      return res.data;
+    });
+}
+
 module.exports.getTestUsersPosts = getTestUsersPosts;
 
 module.exports.getMorePosts = getMorePosts;
 
 module.exports.insertUser = insertUser;
+
+module.exports.authenticateUser = authenticateUser;

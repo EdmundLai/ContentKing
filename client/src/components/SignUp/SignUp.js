@@ -47,10 +47,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
   const classes = useStyles();
 
   const history = useHistory();
+
+  const { logInCallback, setAppUsername } = props;
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -72,6 +74,8 @@ export default function SignUp() {
       setDisplayError(true);
       setErrorMessage(statusObj.errorMessage);
     } else {
+      logInCallback();
+      setAppUsername(username);
       history.push("/topicpicker");
     }
   }

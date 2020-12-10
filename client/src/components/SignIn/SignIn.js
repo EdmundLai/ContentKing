@@ -13,7 +13,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+
+import RequestHandler from "../RequestHandler/RequestHandler";
 
 function Copyright() {
   return (
@@ -45,18 +47,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
+  const { logInCallback, setAppUsername } = props;
+
   const classes = useStyles();
+  const history = useHistory();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [displayError, setDisplayError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     // for debugging
     // it works!
     // console.log(username);
     // console.log(password);
     event.preventDefault();
+
+    const result = await RequestHandler.authenticateUser(username, password);
+
+    if (!result.valid) {
+      if (result.showUser) {
+        setDisplayError(true);
+        setErrorMessage(result.errorMessage);
+      } else {
+        console.error(result.errorMessage);
+      }
+    } else {
+      logInCallback();
+      setAppUsername(username);
+      history.push("/");
+    }
   }
 
   function handleUsernameChange(event) {
@@ -66,6 +88,12 @@ export default function SignIn() {
   function handlePasswordChange(event) {
     setPassword(event.target.value);
   }
+
+  const formError = displayError ? (
+    <div className="ErrorMessage">{errorMessage}</div>
+  ) : (
+    <></>
+  );
 
   return (
     <Container component="main" maxWidth="xs">
@@ -126,6 +154,7 @@ export default function SignIn() {
             </Grid>
           </Grid>
         </form>
+        {formError}
       </div>
       <Box mt={8}>
         <Copyright />

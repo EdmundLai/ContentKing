@@ -17,7 +17,7 @@ import SignIn from "../SignIn/SignIn";
 import SignUp from "../SignUp/SignUp";
 
 export default function UnauthenticatedApp(props) {
-  const { setLoggedIn } = props;
+  const { setLoggedIn, setUsername } = props;
 
   function logInCallback() {
     setLoggedIn(true);
@@ -25,13 +25,13 @@ export default function UnauthenticatedApp(props) {
 
   return (
     <Container minWidth="sm" maxWidth="xl">
-      <LoggedOutAppBar logInCallback={logInCallback} />
+      <LoggedOutAppBar />
       <Switch>
         <Route path="/login">
-          <SignIn />
+          <SignIn logInCallback={logInCallback} setAppUsername={setUsername} />
         </Route>
         <Route path="/newaccount">
-          <SignUp />
+          <SignUp logInCallback={logInCallback} setAppUsername={setUsername} />
         </Route>
         <Route path="/topicpicker">
           <TopicPicker />

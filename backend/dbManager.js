@@ -127,6 +127,23 @@ async function registerUser(username, password) {
   });
 }
 
+async function getPasswordFromUsername(username) {
+  return new Promise((resolve, reject) => {
+    var sql = "SELECT password from USERS WHERE username = ?";
+
+    db.get(sql, [username], (error, row) => {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        console.log(username);
+        console.log(row);
+        resolve(row);
+      }
+    });
+  });
+}
+
 async function checkIfTableIsEmpty(tableName) {
   return new Promise((resolve, reject) => {
     var sql = `SELECT count(*) AS count from ${tableName}`;
@@ -309,6 +326,8 @@ module.exports.initializeDb = initializeDb;
 module.exports.getUserIdByLogin = getUserIdByLogin;
 
 module.exports.getUserSubRedditsFromUsername = getUserSubRedditsFromUsername;
+
+module.exports.getPasswordFromUsername = getPasswordFromUsername;
 
 module.exports.registerUser = registerUser;
 

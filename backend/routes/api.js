@@ -13,12 +13,10 @@ router.get("/setuserinfo", async (req, res) => {
   const username = req.query.username;
   const password = req.query.password;
   if (username.length == 0 || password.length == 0) {
-    res
-      .status(400)
-      .send({
-        valid: false,
-        errorMessage: "Username or password cannot be of length 0.",
-      });
+    res.status(400).send({
+      valid: false,
+      errorMessage: "Username or password cannot be of length 0.",
+    });
     return;
   }
 
@@ -31,6 +29,18 @@ router.get("/setuserinfo", async (req, res) => {
     return;
   }
   res.status(200).send({ valid: true, username: username });
+});
+
+router.get("/checkcredentials", async (req, res) => {
+  const username = req.query.username;
+  const password = req.query.password;
+
+  const statusObj = await authHandler.compareUserCredentials(
+    username,
+    password
+  );
+
+  res.send(statusObj);
 });
 
 // router.get("/user0", async (req, res) => {

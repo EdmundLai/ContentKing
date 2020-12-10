@@ -24,4 +24,39 @@ async function insertUserCredentials(username, password) {
   });
 }
 
+async function compareUserCredentials(username, password) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const row = await dbManager.getPasswordFromUsername(username);
+      if (typeof row == "undefined") {
+        resolve({
+          valid: false,
+          showUser: true,
+          errorMessage: "User provided invalid credentials",
+        });
+      } else {
+        const hashedPass = row.password;
+        const correctPass = await bcrypt.compare(password, hashedPass);
+        if (correctPass) {
+          resolve({ valid: true });
+        } else {
+          resolve({
+            valid: false,
+            showUser: true,
+            errorMessage: "User provided invalid credentials",
+          });
+        }
+      }
+    } catch (error) {
+      resolve({
+        valid: false,
+        showUser: false,
+        errorMessage: error,
+      });
+    }
+  });
+}
+
 module.exports.insertUserCredentials = insertUserCredentials;
+
+module.exports.compareUserCredentials = compareUserCredentials;
