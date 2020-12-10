@@ -15,7 +15,7 @@ async function getMorePosts(category) {
 }
 
 async function insertUser(username, password) {
-  axios
+  return axios
     .get("/api/setuserinfo", {
       params: {
         username: username,
@@ -24,9 +24,11 @@ async function insertUser(username, password) {
     })
     .then((res) => {
       console.log(res);
+      return res.data;
     })
     .catch((error) => {
       console.log(error);
+      return error.data;
     });
 }
 
