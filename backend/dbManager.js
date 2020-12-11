@@ -238,8 +238,8 @@ async function getUserIdByLogin(username) {
 
 async function getSubredditNamesFromUserId(userId) {
   return new Promise((resolve, reject) => {
-    var sql =
-      "SELECT topic_name, subreddit_name from Subreddits WHERE subreddit_id IN (SELECT subreddit_id ";
+    var sql = "SELECT topic_name, subreddit_name, main_category, sub_category ";
+    sql += "from Subreddits WHERE subreddit_id IN (SELECT subreddit_id ";
     sql += "FROM UserSubreddits ";
     sql += "WHERE user_id = ?) ";
 
@@ -260,7 +260,7 @@ async function getUserSubRedditsFromUsername(username) {
 
   // returns empty array if user cannot be found
   if (typeof userIdObj == "undefined") {
-    return [];
+    return null;
   }
 
   const userId = userIdObj.user_id;
@@ -270,6 +270,25 @@ async function getUserSubRedditsFromUsername(username) {
   //console.log(rows);
 
   return rows;
+}
+
+async function getAllSubreddits() {
+  return new Promise((resolve, reject) => {
+    var sql = "SELECT topic_name, subreddit_name, main_category, sub_category ";
+    sql += "from Subreddits";
+
+    db.all(sql, function (error, rows) {
+      if (error) {
+        reject(error);
+      }
+      // console.error("User_id");
+      // console.error(row.user_id);
+
+      //console.log(rows);
+
+      resolve(rows);
+    });
+  });
 }
 
 function insertUserSubreddit(userId, subredditId) {
@@ -330,5 +349,7 @@ module.exports.getUserSubRedditsFromUsername = getUserSubRedditsFromUsername;
 module.exports.getPasswordFromUsername = getPasswordFromUsername;
 
 module.exports.registerUser = registerUser;
+
+module.exports.getAllSubreddits = getAllSubreddits;
 
 module.exports.closeDb = closeDb;

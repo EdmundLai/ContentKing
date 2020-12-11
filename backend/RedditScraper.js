@@ -16,11 +16,24 @@ const listingsDict = {};
 async function getPostsForUserFromDb(username) {
   const subredditPromises = [];
 
-  // array will be empty if username cannot be found
+  // array will be null if username cannot be found
+  // array will be empty if user has no categories yet
   const subredditsArr = await dbManager.getUserSubRedditsFromUsername(username);
 
+  if (subredditsArr == null) {
+    return {
+      valid: false,
+      username: username,
+      categories: [],
+    };
+  }
+
   if (subredditsArr.length === 0) {
-    return null;
+    return {
+      valid: true,
+      username: username,
+      categories: [],
+    };
   }
 
   subredditsArr.forEach((subredditObj) => {
@@ -35,6 +48,7 @@ async function getPostsForUserFromDb(username) {
   const categories = await Promise.all(subredditPromises);
 
   return {
+    valid: true,
     username: username,
     categories: categories,
   };

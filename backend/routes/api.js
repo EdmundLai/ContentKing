@@ -4,6 +4,10 @@ const router = express.Router();
 
 const authHandler = require("../authHandler");
 
+const scraper = require("../RedditScraper");
+
+const dbManager = require("../dbManager");
+
 router.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -55,8 +59,25 @@ router.get("/checkcredentials", async (req, res) => {
 //   }
 // });
 
-router.get("/user0db", async (req, res) => {
-  const username = "Egg";
+// router.get("/user0db", async (req, res) => {
+//   const username = "Egg";
+//   //const testUserObj = scraper.findUserData(userData, username);
+
+//   const userId = dbManager.getUserIdByLogin(username);
+
+//   if (typeof userId == "undefined") {
+//     res.status(404).send("User data cannot be found");
+//   } else {
+//     //const userFeed = await scraper.getPostsForUser(testUserObj);
+
+//     const userFeed = await scraper.getPostsForUserFromDb(username);
+
+//     res.send(userFeed);
+//   }
+// });
+
+router.get("/user", async (req, res) => {
+  const username = req.query.username;
   //const testUserObj = scraper.findUserData(userData, username);
 
   const userId = dbManager.getUserIdByLogin(username);
@@ -81,16 +102,40 @@ router.get("/fetchmore", async (req, res) => {
   //await scraper.
 });
 
-router.get("/csgo", async (req, res) => {
-  const data = await scraper.getSubredditTopPosts("globaloffensive");
+router.get("/allsubreddits", async (req, res) => {
+  try {
+    const subredditArr = await dbManager.getAllSubreddits();
 
-  res.send(data);
+    res.send(subredditArr);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
-router.get("/csharp", async (req, res) => {
-  const data = await scraper.getSubredditTopPosts("csharp");
+router.get("/usersubreddits", async (req, res) => {
+  try {
+    const username = req.query.username;
 
-  res.send(data);
+    const subredditsArr = await dbManager.getUserSubRedditsFromUsername(
+      username
+    );
+
+    res.send(subredditsArr);
+  } catch (error) {
+    res.send(error);
+  }
 });
+
+// router.get("/csgo", async (req, res) => {
+//   const data = await scraper.getSubredditTopPosts("globaloffensive");
+
+//   res.send(data);
+// });
+
+// router.get("/csharp", async (req, res) => {
+//   const data = await scraper.getSubredditTopPosts("csharp");
+
+//   res.send(data);
+// });
 
 module.exports = router;

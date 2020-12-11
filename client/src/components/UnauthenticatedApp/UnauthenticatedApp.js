@@ -8,7 +8,7 @@ import LoggedOutAppBar from "../LoggedOutAppBar/LoggedOutAppBar";
 import WelcomePage from "../WelcomePage/WelcomePage";
 //import ContentFeed from "../ContentFeed/ContentFeed";
 
-import TopicPicker from "../TopicPicker/TopicPicker";
+// import TopicPicker from "../TopicPicker/TopicPicker";
 
 // need to create login page as well as create an account page
 // routes are /login and /newaccount
@@ -32,9 +32,6 @@ export default function UnauthenticatedApp(props) {
         </Route>
         <Route path="/newaccount">
           <SignUp logInCallback={logInCallback} setAppUsername={setUsername} />
-        </Route>
-        <Route path="/topicpicker">
-          <TopicPicker />
         </Route>
         <Route exact path="/">
           <WelcomePage />
