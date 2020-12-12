@@ -136,8 +136,8 @@ async function getPasswordFromUsername(username) {
         console.log(error);
         reject(error);
       } else {
-        console.log(username);
-        console.log(row);
+        //console.log(username);
+        //console.log(row);
         resolve(row);
       }
     });

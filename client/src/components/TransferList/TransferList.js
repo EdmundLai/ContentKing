@@ -41,11 +41,13 @@ function union(a, b) {
   return [...a, ...not(b, a)];
 }
 
-export default function TransferList() {
+export default function TransferList(props) {
   const classes = useStyles();
   const [checked, setChecked] = React.useState([]);
-  const [left, setLeft] = React.useState([0, 1, 2, 3]);
-  const [right, setRight] = React.useState([4, 5, 6, 7]);
+  //const [left, setLeft] = React.useState([0, 1, 2, 3]);
+  //const [right, setRight] = React.useState([4, 5, 6, 7]);
+
+  const { left, setLeft, right, setRight } = props;
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -126,7 +128,7 @@ export default function TransferList() {
                   inputProps={{ "aria-labelledby": labelId }}
                 />
               </ListItemIcon>
-              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+              <ListItemText id={labelId} primary={value} />
             </ListItem>
           );
         })}
@@ -134,6 +136,9 @@ export default function TransferList() {
       </List>
     </Card>
   );
+
+  // console.log(left);
+  // console.log(right);
 
   return (
     <Grid

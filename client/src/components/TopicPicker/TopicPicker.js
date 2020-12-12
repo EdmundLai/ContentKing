@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import TransferList from "../TransferList/TransferList";
 
+import ContentTabs from "../ContentTabs/ContentTabs";
+
 import RequestHandler from "../RequestHandler/RequestHandler";
 
 // just need to categorize the subreddits into tabs and have a/couple picker(s)
@@ -20,41 +22,118 @@ import RequestHandler from "../RequestHandler/RequestHandler";
 export default function TopicPicker(props) {
   const { username } = props;
 
-  // list of all possible subreddits
-  const [subredditsList, setSubredditsList] = useState([]);
-
-  // database user subreddits
-  const [userSubreddits, setUserSubreddits] = useState([]);
+  const [stateTree, setStateTree] = useState({});
+  const [categories, setCategories] = useState([]);
 
   // user subreddits changed by user input via picker
   // this will be passed to transfer list
-  const [userNewSubreddits, setUserNewSubreddits] = useState([]);
 
   useEffect(() => {
-    async function initSubredditStates() {
+    async function initStateTree() {
       const allSubreddits = await RequestHandler.getSubreddits();
 
       const userSubreddits = await RequestHandler.getUserSubreddits(username);
 
       //console.log("list of all subreddits");
-      setSubredditsList(allSubreddits);
-      setUserSubreddits(userSubreddits);
-      setUserNewSubreddits(userSubreddits);
 
-      console.log(allSubreddits);
+      //console.log(allSubreddits);
 
       //console.log("user subreddits:");
-      console.log(userSubreddits);
+
+      //console.log(userSubreddits);
+
+      const mainCategories = allSubreddits.map(
+        (subredditObj) => subredditObj.main_category
+      );
+
+      const distinctMainCategories = [...new Set(mainCategories)];
+
+      setCategories(distinctMainCategories);
+
+      //console.log(distinctMainCategories);
+
+      const newStateTree = {};
+
+      //console.log("subreddits in each category");
+
+      distinctMainCategories.forEach((categoryName) => {
+        const categorySubreddits = allSubreddits
+          .filter((subredditObj) => subredditObj.main_category === categoryName)
+          .map((subredditObj) => subredditObj.topic_name);
+
+        const chosenSubreddits = userSubreddits
+          .filter((subredditObj) => subredditObj.main_category === categoryName)
+          .map((subredditObj) => subredditObj.topic_name);
+
+        //console.log(categorySubreddits);
+
+        const subredditChoices = categorySubreddits.filter(
+          (topicName) => !chosenSubreddits.includes(topicName)
+        );
+
+        //console.log(subredditChoices);
+
+        //console.log(chosenSubreddits);
+
+        newStateTree[categoryName] = {
+          choices: subredditChoices,
+          chosen: chosenSubreddits,
+        };
+      });
+
+      console.log(newStateTree);
+
+      setStateTree(newStateTree);
     }
 
-    initSubredditStates();
+    initStateTree();
   }, [username]);
+
+  // function makeSelection() {
+  //   console.log("User Subreddits");
+  //   console.log(userSubreddits);
+
+  //   console.log("new subreddits");
+  //   console.log(userNewSubreddits);
+  // }
 
   console.log("hello from topic picker");
 
+  console.log(stateTree);
+
+  const content = Object.keys(stateTree).map((mainCategory) => {
+    let leftSide = stateTree[mainCategory].choices;
+    let rightSide = stateTree[mainCategory].chosen;
+
+    function setLeft(newChoices) {
+      const newStateTree = { ...stateTree };
+
+      newStateTree[mainCategory].choices = newChoices;
+
+      setStateTree(newStateTree);
+    }
+
+    function setRight(newChosen) {
+      const newStateTree = { ...stateTree };
+
+      newStateTree[mainCategory].chosen = newChosen;
+
+      setStateTree(newStateTree);
+    }
+
+    return (
+      <TransferList
+        left={leftSide}
+        setLeft={setLeft}
+        right={rightSide}
+        setRight={setRight}
+      />
+    );
+  });
+
   return (
     <div className="TopicPicker">
-      <TransferList />
+      <ContentTabs contentList={content} categoryTitles={categories} />
     </div>
   );
 }
