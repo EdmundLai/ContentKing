@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { Switch, Route } from "react-router-dom";
 import Container from "@material-ui/core/Container";
@@ -16,11 +16,14 @@ export default function AuthenticatedApp(props) {
 
   const [data, setData] = useState(null);
 
+  console.log(username);
+  console.log(data);
+
   function logOutCallback() {
     setLoggedIn(false);
   }
 
-  useEffect(() => {
+  const fetchPostsCallback = useCallback(() => {
     async function fetchPosts() {
       const newPosts = await RequestHandler.getUserPosts(username);
 
@@ -37,9 +40,12 @@ export default function AuthenticatedApp(props) {
         setData(newPosts);
       }
     }
-
     fetchPosts();
   }, [username]);
+
+  useEffect(() => {
+    fetchPostsCallback();
+  }, [fetchPostsCallback]);
 
   async function updateStateFromScroll(category) {
     const categoryPosts = await RequestHandler.getMorePosts(category);
@@ -81,7 +87,13 @@ export default function AuthenticatedApp(props) {
       <Switch>
         <Route
           path="/topicpicker"
-          render={(props) => <TopicPicker {...props} username={username} />}
+          render={(props) => (
+            <TopicPicker
+              {...props}
+              username={username}
+              fetchPosts={fetchPostsCallback}
+            />
+          )}
         />
         <Route
           path="/feed"

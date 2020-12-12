@@ -195,6 +195,18 @@ async function insertUserSubredditByLoginAndTopic(username, topic) {
   }
 }
 
+async function deleteUserSubredditByLoginAndTopic(username, topic) {
+  const userIdObj = await getUserIdByLogin(username);
+
+  if (typeof userIdObj !== "undefined") {
+    const subreddit_id = await getSubredditIdByTopic(topic);
+
+    const user_id = userIdObj.user_id;
+
+    await deleteUserSubreddit(user_id, subreddit_id);
+  }
+}
+
 function getSubredditIdByTopic(subredditName) {
   return new Promise((resolve, reject) => {
     var sql = "SELECT subreddit_id ";
@@ -306,6 +318,21 @@ function insertUserSubreddit(userId, subredditId) {
   });
 }
 
+function deleteUserSubreddit(userId, subredditId) {
+  return new Promise((resolve, reject) => {
+    var sql =
+      "DELETE FROM UserSubreddits WHERE user_id = ? AND subreddit_id = ?";
+
+    db.run(sql, [userId, subredditId], function (error) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(`Last ID: ${this.lastID}, # of Row Changes: ${this.changes}`);
+      }
+    });
+  });
+}
+
 function initializeTables() {
   return new Promise((resolve, reject) => {
     const dbSchema = `CREATE TABLE IF NOT EXISTS Subreddits (
@@ -351,5 +378,9 @@ module.exports.getPasswordFromUsername = getPasswordFromUsername;
 module.exports.registerUser = registerUser;
 
 module.exports.getAllSubreddits = getAllSubreddits;
+
+module.exports.insertUserSubredditByLoginAndTopic = insertUserSubredditByLoginAndTopic;
+
+module.exports.deleteUserSubredditByLoginAndTopic = deleteUserSubredditByLoginAndTopic;
 
 module.exports.closeDb = closeDb;

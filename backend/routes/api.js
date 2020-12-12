@@ -126,6 +126,32 @@ router.get("/usersubreddits", async (req, res) => {
   }
 });
 
+router.get("/usersubreddits/add", async (req, res) => {
+  try {
+    const username = req.query.username;
+    const subredditsArr = req.query.subreddits;
+    subredditsArr.forEach(async (topic) => {
+      await dbManager.insertUserSubredditByLoginAndTopic(username, topic);
+    });
+    res.send(true);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+router.get("/usersubreddits/remove", async (req, res) => {
+  try {
+    const username = req.query.username;
+    const subredditsArr = req.query.subreddits;
+    subredditsArr.forEach(async (topic) => {
+      await dbManager.deleteUserSubredditByLoginAndTopic(username, topic);
+    });
+    res.send(true);
+  } catch (error) {
+    res.send(error);
+  }
+});
+
 // router.get("/csgo", async (req, res) => {
 //   const data = await scraper.getSubredditTopPosts("globaloffensive");
 

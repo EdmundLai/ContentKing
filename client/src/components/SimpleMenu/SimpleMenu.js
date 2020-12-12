@@ -6,6 +6,8 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { useHistory } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
@@ -13,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SimpleMenu() {
+  const history = useHistory();
+
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -24,6 +28,12 @@ export default function SimpleMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  function chooseCategoriesOnClick() {
+    handleClose();
+
+    history.push("/topicpicker");
+  }
 
   return (
     <div>
@@ -43,8 +53,7 @@ export default function SimpleMenu() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>Add Categories</MenuItem>
-        <MenuItem onClick={handleClose}>Remove Categories</MenuItem>
+        <MenuItem onClick={chooseCategoriesOnClick}>Choose Categories</MenuItem>
       </Menu>
     </div>
   );

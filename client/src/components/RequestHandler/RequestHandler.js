@@ -68,6 +68,24 @@ async function getUserSubreddits(username) {
     });
 }
 
+async function insertUserSubreddits(username, subreddits) {
+  return axios.get("/api/usersubreddits/add", {
+    params: {
+      username: username,
+      subreddits: subreddits,
+    },
+  });
+}
+
+async function deleteUserSubreddits(username, subreddits) {
+  return axios.get("/api/usersubreddits/remove", {
+    params: {
+      username: username,
+      subreddits: subreddits,
+    },
+  });
+}
+
 module.exports.getUserPosts = getUserPosts;
 
 module.exports.getMorePosts = getMorePosts;
@@ -79,3 +97,7 @@ module.exports.authenticateUser = authenticateUser;
 module.exports.getSubreddits = getSubreddits;
 
 module.exports.getUserSubreddits = getUserSubreddits;
+
+module.exports.insertUserSubreddits = insertUserSubreddits;
+
+module.exports.deleteUserSubreddits = deleteUserSubreddits;
