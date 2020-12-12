@@ -34,7 +34,7 @@ function CategoryPostsContainer(props) {
         <Grid container spacing={3}>
           {categoryPosts.posts.map((post, index) => {
             return (
-              <Grid item xs={12} sm={6} lg={4} xl={3}>
+              <Grid item xs={12} sm={6}>
                 <SimpleCard key={index} post={post} />
               </Grid>
             );
