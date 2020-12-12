@@ -2,7 +2,11 @@
 
 const sqlite3 = require("sqlite3").verbose();
 
-const DB_PATH = "./db/content.db";
+const path = require("path");
+
+const dbFileName = "content";
+
+const pathName = path.join(__dirname, "/db/", dbFileName, ".db");
 
 const { categories } = require("./reddit_categories");
 //const { userData } = require("./user_prefs");
@@ -29,7 +33,7 @@ function closeDb(dbConn) {
 }
 
 function initializeDbConnection() {
-  let db = new sqlite3.Database(DB_PATH, (err) => {
+  let db = new sqlite3.Database(pathName, (err) => {
     if (err) {
       console.error(err.message);
     }
