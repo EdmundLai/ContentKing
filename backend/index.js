@@ -15,8 +15,8 @@ app.use("/api", apiRouter);
 process.on("SIGTERM", shutDown);
 process.on("SIGINT", shutDown);
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(rootDir, "client/build", "index.html"));
 });
 
 app.listen(port, async () => {
