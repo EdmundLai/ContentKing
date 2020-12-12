@@ -7,9 +7,9 @@ import ContentFeed from "../ContentFeed/ContentFeed";
 
 import TopicPicker from "../TopicPicker/TopicPicker";
 
-import RequestHandler from "../RequestHandler/RequestHandler";
-
 import { Link } from "react-router-dom";
+
+const RequestHandler = require("../RequestHandler/RequestHandler");
 
 export default function AuthenticatedApp(props) {
   const { setLoggedIn, username } = props;

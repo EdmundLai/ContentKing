@@ -4,8 +4,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 
 import { BrowserRouter as Router } from "react-router-dom";
 
-//import RequestHandler from "./components/RequestHandler/RequestHandler";
-
 import AuthenticatedApp from "./components/AuthenticatedApp/AuthenticatedApp";
 import UnauthenticatedApp from "./components/UnauthenticatedApp/UnauthenticatedApp";
 

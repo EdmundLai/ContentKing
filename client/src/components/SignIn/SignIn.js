@@ -15,7 +15,7 @@ import Container from "@material-ui/core/Container";
 
 import { Link, useHistory } from "react-router-dom";
 
-import RequestHandler from "../RequestHandler/RequestHandler";
+const RequestHandler = require("../RequestHandler/RequestHandler");
 
 function Copyright() {
   return (

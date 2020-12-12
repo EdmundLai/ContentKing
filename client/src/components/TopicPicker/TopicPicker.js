@@ -4,11 +4,11 @@ import TransferList from "../TransferList/TransferList";
 
 import ContentTabs from "../ContentTabs/ContentTabs";
 
-import RequestHandler from "../RequestHandler/RequestHandler";
-
 import Button from "@material-ui/core/Button";
 
 import { useHistory } from "react-router-dom";
+
+const RequestHandler = require("../RequestHandler/RequestHandler");
 
 // just need to categorize the subreddits into tabs and have a/couple picker(s)
 // in each tab based on if each picker is by subCategory
