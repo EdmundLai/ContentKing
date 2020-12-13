@@ -1,7 +1,7 @@
-var axios = require("axios");
+import { get } from "axios";
 
 async function getUserPosts(username) {
-  const res = await axios.get("/api/user", {
+  const res = await get("/api/user", {
     params: {
       username: username,
     },
@@ -11,7 +11,7 @@ async function getUserPosts(username) {
 }
 
 async function getMorePosts(category) {
-  const res = await axios.get("/api/fetchmore", {
+  const res = await get("/api/fetchmore", {
     params: {
       category: category,
     },
@@ -20,13 +20,12 @@ async function getMorePosts(category) {
 }
 
 async function insertUser(username, password) {
-  return axios
-    .get("/api/setuserinfo", {
-      params: {
-        username: username,
-        password: password,
-      },
-    })
+  return get("/api/setuserinfo", {
+    params: {
+      username: username,
+      password: password,
+    },
+  })
     .then((res) => {
       console.log(res);
       return res.data;
@@ -38,38 +37,34 @@ async function insertUser(username, password) {
 }
 
 async function authenticateUser(username, password) {
-  return axios
-    .get("/api/checkcredentials", {
-      params: {
-        username: username,
-        password: password,
-      },
-    })
-    .then((res) => {
-      return res.data;
-    });
+  return get("/api/checkcredentials", {
+    params: {
+      username: username,
+      password: password,
+    },
+  }).then((res) => {
+    return res.data;
+  });
 }
 
 async function getSubreddits() {
-  return axios.get("/api/allsubreddits").then((res) => {
+  return get("/api/allsubreddits").then((res) => {
     return res.data;
   });
 }
 
 async function getUserSubreddits(username) {
-  return axios
-    .get("/api/usersubreddits", {
-      params: {
-        username: username,
-      },
-    })
-    .then((res) => {
-      return res.data;
-    });
+  return get("/api/usersubreddits", {
+    params: {
+      username: username,
+    },
+  }).then((res) => {
+    return res.data;
+  });
 }
 
 async function insertUserSubreddits(username, subreddits) {
-  return axios.get("/api/usersubreddits/add", {
+  return get("/api/usersubreddits/add", {
     params: {
       username: username,
       subreddits: subreddits,
@@ -78,7 +73,7 @@ async function insertUserSubreddits(username, subreddits) {
 }
 
 async function deleteUserSubreddits(username, subreddits) {
-  return axios.get("/api/usersubreddits/remove", {
+  return get("/api/usersubreddits/remove", {
     params: {
       username: username,
       subreddits: subreddits,
@@ -86,18 +81,26 @@ async function deleteUserSubreddits(username, subreddits) {
   });
 }
 
-module.exports.getUserPosts = getUserPosts;
+const _getUserPosts = getUserPosts;
+export { _getUserPosts as getUserPosts };
 
-module.exports.getMorePosts = getMorePosts;
+const _getMorePosts = getMorePosts;
+export { _getMorePosts as getMorePosts };
 
-module.exports.insertUser = insertUser;
+const _insertUser = insertUser;
+export { _insertUser as insertUser };
 
-module.exports.authenticateUser = authenticateUser;
+const _authenticateUser = authenticateUser;
+export { _authenticateUser as authenticateUser };
 
-module.exports.getSubreddits = getSubreddits;
+const _getSubreddits = getSubreddits;
+export { _getSubreddits as getSubreddits };
 
-module.exports.getUserSubreddits = getUserSubreddits;
+const _getUserSubreddits = getUserSubreddits;
+export { _getUserSubreddits as getUserSubreddits };
 
-module.exports.insertUserSubreddits = insertUserSubreddits;
+const _insertUserSubreddits = insertUserSubreddits;
+export { _insertUserSubreddits as insertUserSubreddits };
 
-module.exports.deleteUserSubreddits = deleteUserSubreddits;
+const _deleteUserSubreddits = deleteUserSubreddits;
+export { _deleteUserSubreddits as deleteUserSubreddits };
