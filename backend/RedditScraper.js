@@ -1,7 +1,7 @@
 const snoowrap = require("snoowrap");
 const { categories } = require("./reddit_categories");
 
-const dbManager = require("./dbManager");
+const dbManager = require("./postgreDbManager");
 
 const r = new snoowrap({
   userAgent: process.env.USER_AGENT,

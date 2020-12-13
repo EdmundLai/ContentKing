@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 
 const saltRounds = 10;
 
-const dbManager = require("./dbManager");
+const dbManager = require("./postgreDbManager");
 
 async function insertUserCredentials(username, password) {
   return new Promise(async (resolve, reject) => {

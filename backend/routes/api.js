@@ -6,7 +6,7 @@ const authHandler = require("../authHandler");
 
 const scraper = require("../RedditScraper");
 
-const dbManager = require("../dbManager");
+const dbManager = require("../postgreDbManager");
 
 router.get("/", (req, res) => {
   res.send("Hello World!");

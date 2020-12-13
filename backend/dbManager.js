@@ -37,7 +37,7 @@ function initializeDbConnection() {
     if (err) {
       console.error(err.message);
     }
-    console.log(`Connected to the SQlite database at ${DB_PATH}.`);
+    console.log(`Connected to the SQlite database at ${pathName}.`);
   });
 
   db.exec("PRAGMA foreign_keys = ON;", function (error) {
@@ -79,30 +79,10 @@ async function insertSampleSubreddits() {
   });
 }
 
-// async function insertSampleUserSubreddits() {
-//   // await insertUserSubredditByLoginAndTopic("Egg", "Javascript");
-//   // await insertUserSubredditByLoginAndTopic(
-//   //   "Egg",
-//   //   "Counterstrike: Global Offensive"
-//   // );
-//   // await insertUserSubredditByLoginAndTopic("Egg", "Genshin Impact");
-
-//   userData.users.forEach((userObj) => {
-//     const username = userObj.username;
-//     userObj.categories.forEach(async (categoryObj) => {
-//       const topicName = categoryObj.subSubCategory;
-//       await insertUserSubredditByLoginAndTopic(username, topicName);
-//     });
-//   });
-// }
-
 async function initializeDbWithSampleData() {
   // we want to create users dynamically, not seed them
 
   // const usersEmpty = await checkIfTableIsEmpty("Users");
-  // if (usersEmpty) {
-  //   await insertSampleUsers();
-  // }
 
   const subredditsEmpty = await checkIfTableIsEmpty("Subreddits");
   if (subredditsEmpty) {
@@ -110,10 +90,6 @@ async function initializeDbWithSampleData() {
   }
 
   // user subreddits will be created as user adds them to the list
-  // const userSubredditsEmpty = await checkIfTableIsEmpty("UserSubreddits");
-  // if (userSubredditsEmpty) {
-  //   await insertSampleUserSubreddits();
-  // }
 }
 
 async function registerUser(username, password) {
