@@ -34,6 +34,10 @@ const useStyles = makeStyles({
   title: {
     fontSize: "1rem",
   },
+  titleLink: {
+    color: "inherit",
+    textDecoration: "inherit",
+  },
   cardContent: {
     display: "flex",
     flexDirection: "column",
@@ -56,7 +60,7 @@ export default function SimpleCard(props) {
   const cardTitle = post.title;
   const cardLink = post.link;
 
-  //const redditLink = `https://www.reddit.com${post.permalink}`;
+  const redditLink = `https://www.reddit.com${post.permalink}`;
 
   function checkURLIsImg(url) {
     return url.match(/\.(jpeg|jpg|png)$/) != null;
@@ -94,7 +98,9 @@ export default function SimpleCard(props) {
           color="textSecondary"
           gutterBottom
         >
-          {cardTitle}
+          <a className={classes.titleLink} href={redditLink}>
+            {cardTitle}
+          </a>
         </Typography>
         {linkContent}
       </CardContent>
