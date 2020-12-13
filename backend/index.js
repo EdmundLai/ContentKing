@@ -10,6 +10,8 @@ const rootDir = path.join(__dirname, "../");
 
 const apiRouter = require("./routes/api");
 
+app.use(express.static(path.join(rootDir, "client/build")));
+
 app.use(cors());
 
 app.use("/api", apiRouter);
