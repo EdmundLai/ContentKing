@@ -81,26 +81,13 @@ async function deleteUserSubreddits(username, subreddits) {
   });
 }
 
-const _getUserPosts = getUserPosts;
-export { _getUserPosts as getUserPosts };
-
-const _getMorePosts = getMorePosts;
-export { _getMorePosts as getMorePosts };
-
-const _insertUser = insertUser;
-export { _insertUser as insertUser };
-
-const _authenticateUser = authenticateUser;
-export { _authenticateUser as authenticateUser };
-
-const _getSubreddits = getSubreddits;
-export { _getSubreddits as getSubreddits };
-
-const _getUserSubreddits = getUserSubreddits;
-export { _getUserSubreddits as getUserSubreddits };
-
-const _insertUserSubreddits = insertUserSubreddits;
-export { _insertUserSubreddits as insertUserSubreddits };
-
-const _deleteUserSubreddits = deleteUserSubreddits;
-export { _deleteUserSubreddits as deleteUserSubreddits };
+export {
+  getUserPosts,
+  getMorePosts,
+  insertUser,
+  authenticateUser,
+  getSubreddits,
+  getUserSubreddits,
+  insertUserSubreddits,
+  deleteUserSubreddits,
+};

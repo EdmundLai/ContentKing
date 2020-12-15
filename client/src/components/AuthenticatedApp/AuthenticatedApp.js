@@ -7,7 +7,7 @@ import ContentFeed from "../ContentFeed/ContentFeed";
 
 import TopicPicker from "../TopicPicker/TopicPicker";
 
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
 const RequestHandler = require("../RequestHandler/RequestHandler");
 
@@ -16,8 +16,8 @@ export default function AuthenticatedApp(props) {
 
   const [data, setData] = useState(null);
 
-  console.log(username);
-  console.log(data);
+  //console.log(username);
+  //console.log(data);
 
   function logOutCallback() {
     setLoggedIn(false);
@@ -27,7 +27,8 @@ export default function AuthenticatedApp(props) {
     async function fetchPosts() {
       const newPosts = await RequestHandler.getUserPosts(username);
 
-      console.log(newPosts);
+      //console.log("new posts:");
+      //console.log(newPosts);
 
       if (!newPosts.valid) {
         console.error(
@@ -39,8 +40,10 @@ export default function AuthenticatedApp(props) {
 
         setData(newPosts);
       }
+
+      return newPosts;
     }
-    fetchPosts();
+    return fetchPosts();
   }, [username]);
 
   useEffect(() => {
@@ -96,7 +99,8 @@ export default function AuthenticatedApp(props) {
           )}
         />
         <Route
-          path="/feed"
+          exact
+          path="/"
           render={(props) => (
             <ContentFeed
               {...props}
@@ -105,7 +109,7 @@ export default function AuthenticatedApp(props) {
             />
           )}
         />
-        <Route exact path="/">
+        {/* <Route exact path="/">
           <div className="PersonalWelcome">
             Welcome to Content King, {username}!
             <p>
@@ -116,7 +120,7 @@ export default function AuthenticatedApp(props) {
               Here is your <Link to={"/feed"}>feed</Link>
             </p>
           </div>
-        </Route>
+        </Route> */}
       </Switch>
     </Container>
   );

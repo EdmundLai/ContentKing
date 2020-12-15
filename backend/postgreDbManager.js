@@ -137,6 +137,20 @@ function insertUserSubreddit(userId, subredditId) {
   });
 }
 
+function deleteUserSubreddit(userId, subredditId) {
+  return new Promise(async (resolve, reject) => {
+    var sql =
+      "DELETE FROM UserSubreddits WHERE user_id = $1 AND subreddit_id = $2";
+
+    try {
+      const res = await pool.query(sql, [userId, subredditId]);
+      resolve(res);
+    } catch (error) {
+      reject(error.stack);
+    }
+  });
+}
+
 async function getSubredditNamesFromUserId(userId) {
   return new Promise(async (resolve, reject) => {
     var sql = "SELECT topic_name, subreddit_name, main_category, sub_category ";
@@ -161,7 +175,9 @@ async function insertUserSubredditByLoginAndTopic(username, topic) {
 
     const user_id = userIdObj.user_id;
 
-    await insertUserSubreddit(user_id, subreddit_id);
+    const result = await insertUserSubreddit(user_id, subreddit_id);
+
+    return result;
   }
 }
 
@@ -173,7 +189,9 @@ async function deleteUserSubredditByLoginAndTopic(username, topic) {
 
     const user_id = userIdObj.user_id;
 
-    await deleteUserSubreddit(user_id, subreddit_id);
+    const result = await deleteUserSubreddit(user_id, subreddit_id);
+
+    return result;
   }
 }
 

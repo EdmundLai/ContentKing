@@ -11,6 +11,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
 import Divider from "@material-ui/core/Divider";
 
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: "auto",
@@ -48,6 +50,8 @@ export default function TransferList(props) {
   //const [right, setRight] = React.useState([4, 5, 6, 7]);
 
   const { left, setLeft, right, setRight } = props;
+
+  const smScreenSize = useMediaQuery("(max-width:600px)");
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -140,6 +144,10 @@ export default function TransferList(props) {
   // console.log(left);
   // console.log(right);
 
+  const moveToChosenIcon = smScreenSize ? "∨" : ">";
+  const moveToChoicesIcon = smScreenSize ? "∧" : "<";
+  const buttonDirection = smScreenSize ? "row" : "column";
+
   return (
     <Grid
       container
@@ -148,9 +156,16 @@ export default function TransferList(props) {
       alignItems="center"
       className={classes.root}
     >
-      <Grid item>{customList("Choices", left)}</Grid>
-      <Grid item>
-        <Grid container direction="column" alignItems="center">
+      <Grid item xs={"auto"} sm={"auto"}>
+        {customList("Choices", left)}
+      </Grid>
+      <Grid item xs={12} sm={"auto"}>
+        <Grid
+          container
+          direction={buttonDirection}
+          alignItems="center"
+          justify="center"
+        >
           <Button
             variant="outlined"
             size="small"
@@ -159,7 +174,7 @@ export default function TransferList(props) {
             disabled={leftChecked.length === 0}
             aria-label="move selected right"
           >
-            &gt;
+            {moveToChosenIcon}
           </Button>
           <Button
             variant="outlined"
@@ -169,11 +184,13 @@ export default function TransferList(props) {
             disabled={rightChecked.length === 0}
             aria-label="move selected left"
           >
-            &lt;
+            {moveToChoicesIcon}
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList("Chosen", right)}</Grid>
+      <Grid item xs={"auto"} sm={"auto"}>
+        {customList("Chosen", right)}
+      </Grid>
     </Grid>
   );
 }

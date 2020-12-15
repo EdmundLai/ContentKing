@@ -7,8 +7,6 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
-//import SimpleMenu from "../SimpleMenu/SimpleMenu";
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -16,8 +14,8 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
       {...other}
     >
       {value === index && (
@@ -37,14 +35,15 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    id: `scrollable-auto-tab-${index}`,
+    "aria-controls": `scrollable-auto-tabpanel-${index}`,
   };
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    width: "100%",
     backgroundColor: theme.palette.background.paper,
   },
 }));
@@ -61,8 +60,16 @@ export default function ContentTabs(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
-        <Tabs value={value} onChange={handleChange} aria-label="content tabs">
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="scrollable auto tabs example"
+        >
           {categoryTitles.map((title, index) => {
             return <Tab key={index} label={title} {...a11yProps(index)} />;
           })}

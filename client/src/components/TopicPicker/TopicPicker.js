@@ -116,14 +116,6 @@ export default function TopicPicker(props) {
     return chosenTopicsArr;
   }
 
-  // function makeSelection() {
-  //   console.log("User Subreddits");
-  //   console.log(userSubreddits);
-
-  //   console.log("new subreddits");
-  //   console.log(userNewSubreddits);
-  // }
-
   console.log("hello from topic picker");
 
   //console.log(stateTree);
@@ -143,16 +135,40 @@ export default function TopicPicker(props) {
 
     //console.log(removedTopics);
 
-    await RequestHandler.deleteUserSubreddits(username, removedTopics);
+    const deleteResult = await RequestHandler.deleteUserSubreddits(
+      username,
+      removedTopics
+    );
 
-    await RequestHandler.insertUserSubreddits(username, addedTopics);
+    console.log(deleteResult);
 
-    fetchPosts();
+    const insertResult = await RequestHandler.insertUserSubreddits(
+      username,
+      addedTopics
+    );
 
-    history.push("/feed");
+    console.log(insertResult);
+
+    let sameArrChecker = (arr, target) =>
+      target.every((v) => arr.includes(v)) && arr.length === target.length;
+
+    let userSubreddits = await RequestHandler.getUserSubreddits(username);
+
+    let userTopics = userSubreddits.map((subreddit) => subreddit.topic_name);
+
+    var intervalfn = setInterval(async () => {
+      userSubreddits = await RequestHandler.getUserSubreddits(username);
+
+      userTopics = userSubreddits.map((subreddit) => subreddit.topic_name);
+
+      if (sameArrChecker(chosenArr, userTopics)) {
+        clearInterval(intervalfn);
+        await fetchPosts();
+        //console.log(fetchPostsResult);
+        history.push("/");
+      }
+    }, 100);
   }
-
-  //console.log(chosenArr);
 
   const content = Object.keys(stateTree).map((mainCategory) => {
     let leftSide = stateTree[mainCategory].choices;

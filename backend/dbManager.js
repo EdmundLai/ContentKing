@@ -9,7 +9,6 @@ const dbFileName = "content";
 const pathName = path.join(__dirname, "/db/", dbFileName, ".db");
 
 const { categories } = require("./reddit_categories");
-//const { userData } = require("./user_prefs");
 
 // open database in memory
 let db = initializeDbConnection();
@@ -50,11 +49,6 @@ function initializeDbConnection() {
 
   return db;
 }
-
-// async function insertSampleUsers() {
-//   await registerUser("Egg", "Kappa123");
-//   await registerUser("Bacon", "AYAYA123");
-// }
 
 async function insertSampleSubreddits() {
   // console.log("inside insertSampleSubreddits");

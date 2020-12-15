@@ -47,35 +47,6 @@ router.get("/checkcredentials", async (req, res) => {
   res.send(statusObj);
 });
 
-// router.get("/user0", async (req, res) => {
-//   const testUserObj = scraper.findUserData(userData, "Egg");
-
-//   if (testUserObj == null) {
-//     res.status(404).send("User data cannot be found");
-//   } else {
-//     const userFeed = await scraper.getPostsForUser(testUserObj);
-
-//     res.send(userFeed);
-//   }
-// });
-
-// router.get("/user0db", async (req, res) => {
-//   const username = "Egg";
-//   //const testUserObj = scraper.findUserData(userData, username);
-
-//   const userId = dbManager.getUserIdByLogin(username);
-
-//   if (typeof userId == "undefined") {
-//     res.status(404).send("User data cannot be found");
-//   } else {
-//     //const userFeed = await scraper.getPostsForUser(testUserObj);
-
-//     const userFeed = await scraper.getPostsForUserFromDb(username);
-
-//     res.send(userFeed);
-//   }
-// });
-
 router.get("/user", async (req, res) => {
   const username = req.query.username;
   //const testUserObj = scraper.findUserData(userData, username);
@@ -99,7 +70,6 @@ router.get("/fetchmore", async (req, res) => {
   const data = await scraper.fetchMorePosts(category);
 
   res.send(data);
-  //await scraper.
 });
 
 router.get("/allsubreddits", async (req, res) => {
@@ -151,17 +121,5 @@ router.get("/usersubreddits/remove", async (req, res) => {
     res.send(error);
   }
 });
-
-// router.get("/csgo", async (req, res) => {
-//   const data = await scraper.getSubredditTopPosts("globaloffensive");
-
-//   res.send(data);
-// });
-
-// router.get("/csharp", async (req, res) => {
-//   const data = await scraper.getSubredditTopPosts("csharp");
-
-//   res.send(data);
-// });
 
 module.exports = router;
