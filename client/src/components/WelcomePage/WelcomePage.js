@@ -36,14 +36,14 @@ export default function WelcomePage() {
           color="textSecondary"
           component="p"
         >
-          Please
+          Please{" "}
           <Link className={classes.link} to="/login">
             log in
-          </Link>
-          or
+          </Link>{" "}
+          or{" "}
           <Link className={classes.link} to="/newaccount">
             create
-          </Link>
+          </Link>{" "}
           an account to subscribe to content.
         </Typography>
       </Container>
