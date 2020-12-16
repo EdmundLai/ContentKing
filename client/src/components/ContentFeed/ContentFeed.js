@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
 function ContentFeed(props) {
   const classes = useStyles();
 
-  const { data, updateCallback } = props;
+  const { data, updateCallback, setData } = props;
 
   if (data == null) {
     return <></>;
@@ -29,6 +29,7 @@ function ContentFeed(props) {
         key={index}
         categoryPosts={categoryPosts}
         updateCallback={updateCallback}
+        setData={setData}
       />
     );
   });

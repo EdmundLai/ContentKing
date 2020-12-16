@@ -195,16 +195,32 @@ async function deleteUserSubredditByLoginAndTopic(username, topic) {
   }
 }
 
-function getSubredditIdByTopic(subredditName) {
+function getSubredditIdByTopic(topicName) {
   return new Promise(async (resolve, reject) => {
     var sql = "SELECT subreddit_id ";
     sql += "FROM Subreddits ";
     sql += "WHERE topic_name = $1 ";
 
     try {
-      const res = await pool.query(sql, [subredditName]);
+      const res = await pool.query(sql, [topicName]);
       //console.log(res.rows[0].subreddit_id);
       resolve(res.rows[0].subreddit_id);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+function getSubredditNameByTopic(topicName) {
+  return new Promise(async (resolve, reject) => {
+    var sql = "SELECT subreddit_name ";
+    sql += "FROM Subreddits ";
+    sql += "WHERE topic_name = $1 ";
+
+    try {
+      const res = await pool.query(sql, [topicName]);
+      //console.log(res.rows[0].subreddit_id);
+      resolve(res.rows[0].subreddit_name);
     } catch (error) {
       reject(error);
     }
@@ -286,6 +302,8 @@ async function registerUser(username, password) {
 module.exports.getUserIdByLogin = getUserIdByLogin;
 
 module.exports.getUserSubRedditsFromUsername = getUserSubRedditsFromUsername;
+
+module.exports.getSubredditNameByTopic = getSubredditNameByTopic;
 
 module.exports.getPasswordFromUsername = getPasswordFromUsername;
 

@@ -64,6 +64,14 @@ router.get("/user", async (req, res) => {
   }
 });
 
+router.get("/topicposts", async (req, res) => {
+  const topicArr = req.query.topicArr;
+
+  const feed = await scraper.getTopPostsFromTopics(topicArr);
+
+  res.send(feed);
+});
+
 router.get("/fetchmore", async (req, res) => {
   const category = req.query.category;
 

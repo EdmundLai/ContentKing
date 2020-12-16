@@ -2,6 +2,8 @@ import React from "react";
 
 import ButtonAppBar from "../ButtonAppBar/ButtonAppBar";
 
+import Button from "@material-ui/core/Button";
+
 import { useHistory } from "react-router-dom";
 
 export default function LoggedOutAppBar(props) {
@@ -13,7 +15,20 @@ export default function LoggedOutAppBar(props) {
     history.push("/login");
   }
 
-  return (
-    <ButtonAppBar buttonText="Login" buttonHandler={redirectToLoginPage} />
+  function redirectToCreateAccount() {
+    history.push("/newaccount");
+  }
+
+  const actionButtons = (
+    <>
+      <Button onClick={redirectToLoginPage} color="inherit">
+        Login
+      </Button>
+      <Button onClick={redirectToCreateAccount} color="inherit">
+        Sign Up
+      </Button>
+    </>
   );
+
+  return <ButtonAppBar buttonMenu={actionButtons} />;
 }

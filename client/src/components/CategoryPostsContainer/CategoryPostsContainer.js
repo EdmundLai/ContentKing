@@ -5,12 +5,15 @@ import Grid from "@material-ui/core/Grid";
 import InfiniteScroll from "react-infinite-scroller";
 
 function CategoryPostsContainer(props) {
-  const { categoryPosts, updateCallback } = props;
+  const { categoryPosts, updateCallback, setData } = props;
 
   const [contentAvailable, setContentAvailable] = useState(true);
 
   async function loadMoreContent() {
-    const morePostsLoaded = await updateCallback(categoryPosts.category);
+    const morePostsLoaded = await updateCallback(
+      categoryPosts.category,
+      setData
+    );
 
     setContentAvailable(morePostsLoaded);
   }

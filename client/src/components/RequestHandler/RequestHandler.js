@@ -10,6 +10,16 @@ async function getUserPosts(username) {
   return res.data;
 }
 
+async function getTopicsPosts(topicArr) {
+  const res = await get("/api/topicposts", {
+    params: {
+      topicArr: topicArr,
+    },
+  });
+
+  return res.data;
+}
+
 async function getMorePosts(category) {
   const res = await get("/api/fetchmore", {
     params: {
@@ -90,4 +100,5 @@ export {
   getUserSubreddits,
   insertUserSubreddits,
   deleteUserSubreddits,
+  getTopicsPosts,
 };

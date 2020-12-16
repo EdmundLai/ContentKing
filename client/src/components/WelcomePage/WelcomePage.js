@@ -18,20 +18,10 @@ export default function WelcomePage() {
   return (
     <React.Fragment>
       <CssBaseline />
-
       {/* Hero unit */}
       <Container maxWidth="sm" component="main" className={classes.heroContent}>
         <Typography
-          component="h1"
-          variant="h2"
-          align="center"
-          color="textPrimary"
-          gutterBottom
-        >
-          Content King
-        </Typography>
-        <Typography
-          variant="h5"
+          variant="h6"
           align="center"
           color="textSecondary"
           component="p"
@@ -44,7 +34,7 @@ export default function WelcomePage() {
           <Link className={classes.link} to="/newaccount">
             create
           </Link>{" "}
-          an account to subscribe to content.
+          an account to customize your content.
         </Typography>
       </Container>
       {/* End hero unit */}

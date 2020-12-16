@@ -15,6 +15,8 @@ import Container from "@material-ui/core/Container";
 
 import { Link, useHistory } from "react-router-dom";
 
+import Cookies from "js-cookie";
+
 const RequestHandler = require("../RequestHandler/RequestHandler");
 
 function Copyright() {
@@ -52,7 +54,7 @@ export default function SignUp(props) {
 
   const history = useHistory();
 
-  const { logInCallback, setAppUsername } = props;
+  const { logInCallback } = props;
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -74,8 +76,9 @@ export default function SignUp(props) {
       setDisplayError(true);
       setErrorMessage(statusObj.errorMessage);
     } else {
-      logInCallback();
-      setAppUsername(username);
+      logInCallback(username);
+      Cookies.set("username", username, { expires: 7 });
+      //setAppUsername(username);
       history.push("/topicpicker");
     }
   }

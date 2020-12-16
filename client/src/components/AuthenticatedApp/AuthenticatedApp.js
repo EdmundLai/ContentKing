@@ -12,15 +12,18 @@ import TopicPicker from "../TopicPicker/TopicPicker";
 const RequestHandler = require("../RequestHandler/RequestHandler");
 
 export default function AuthenticatedApp(props) {
-  const { setLoggedIn, username } = props;
+  const { setLoggedIn, setUsername, username, updateCallback } = props;
 
   const [data, setData] = useState(null);
+
+  //console.log(data);
 
   //console.log(username);
   //console.log(data);
 
   function logOutCallback() {
     setLoggedIn(false);
+    setUsername(null);
   }
 
   const fetchPostsCallback = useCallback(() => {
@@ -50,40 +53,6 @@ export default function AuthenticatedApp(props) {
     fetchPostsCallback();
   }, [fetchPostsCallback]);
 
-  async function updateStateFromScroll(category) {
-    const categoryPosts = await RequestHandler.getMorePosts(category);
-
-    let updated = true;
-
-    setData((prevData) => {
-      //console.error(prevData);
-      let newData = Object.assign({}, prevData);
-
-      const index = prevData.categories.findIndex(
-        (categoryObj) => categoryObj.category === category
-      );
-
-      // some error occurred with the fetch more command
-      if (categoryPosts == null) {
-        console.error(
-          "Reddit api was unable to fetch any more posts from the listing."
-        );
-        updated = false;
-        return prevData;
-      }
-
-      if (prevData.categories[index].length === categoryPosts.length) {
-        updated = false;
-      }
-
-      newData.categories[index] = categoryPosts;
-
-      return newData;
-    });
-
-    return updated;
-  }
-
   return (
     <Container minWidth="sm" maxWidth="xl">
       <LoggedInAppBar logOutCallback={logOutCallback} />
@@ -105,22 +74,11 @@ export default function AuthenticatedApp(props) {
             <ContentFeed
               {...props}
               data={data}
-              updateCallback={updateStateFromScroll}
+              updateCallback={updateCallback}
+              setData={setData}
             />
           )}
         />
-        {/* <Route exact path="/">
-          <div className="PersonalWelcome">
-            Welcome to Content King, {username}!
-            <p>
-              Choose your subscribed topics{" "}
-              <Link to={"/topicpicker"}>here</Link>
-            </p>
-            <p>
-              Here is your <Link to={"/feed"}>feed</Link>
-            </p>
-          </div>
-        </Route> */}
       </Switch>
     </Container>
   );

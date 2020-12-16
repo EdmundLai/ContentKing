@@ -2,6 +2,10 @@ import React from "react";
 
 import ButtonAppBar from "../ButtonAppBar/ButtonAppBar";
 
+import Button from "@material-ui/core/Button";
+
+import Cookies from "js-cookie";
+
 import { useHistory } from "react-router-dom";
 
 export default function LoggedInAppBar(props) {
@@ -12,10 +16,16 @@ export default function LoggedInAppBar(props) {
   function handleLogOut() {
     logOutCallback();
 
+    Cookies.remove("username");
+
     history.push("/");
   }
 
-  return (
-    <ButtonAppBar buttonText="Logout" buttonHandler={handleLogOut} showMenu />
+  const actionButtons = (
+    <Button onClick={handleLogOut} color="inherit">
+      Logout
+    </Button>
   );
+
+  return <ButtonAppBar buttonMenu={actionButtons} showMenu />;
 }

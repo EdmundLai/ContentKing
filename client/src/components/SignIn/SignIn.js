@@ -13,6 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
+import Cookies from "js-cookie";
+
 import { Link, useHistory } from "react-router-dom";
 
 const RequestHandler = require("../RequestHandler/RequestHandler");
@@ -48,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn(props) {
-  const { logInCallback, setAppUsername } = props;
+  const { logInCallback } = props;
 
   const classes = useStyles();
   const history = useHistory();
@@ -75,8 +77,9 @@ export default function SignIn(props) {
         console.error(result.errorMessage);
       }
     } else {
-      logInCallback();
-      setAppUsername(username);
+      logInCallback(username);
+      Cookies.set("username", username, { expires: 7 });
+      //setAppUsername(username);
       history.push("/");
     }
   }

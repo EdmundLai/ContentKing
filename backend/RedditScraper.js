@@ -54,6 +54,28 @@ async function getPostsForUserFromDb(username) {
   };
 }
 
+async function getTopPostsFromTopics(topicArr) {
+  const promiseArr = [];
+
+  for (let i = 0; i < topicArr.length; i++) {
+    const topic = topicArr[i];
+
+    const subredditName = await dbManager.getSubredditNameByTopic(topic);
+
+    const promise = getSubredditTopPosts(subredditName, topic);
+
+    promiseArr.push(promise);
+  }
+
+  const categories = await Promise.all(promiseArr);
+
+  return {
+    valid: true,
+    username: "",
+    categories: categories,
+  };
+}
+
 async function getSubredditTopPosts(subredditName, category) {
   const subreddit = r.getSubreddit(subredditName);
 
@@ -123,3 +145,5 @@ module.exports.getSubredditTopPosts = getSubredditTopPosts;
 module.exports.fetchMorePosts = fetchMorePosts;
 
 module.exports.getPostsForUserFromDb = getPostsForUserFromDb;
+
+module.exports.getTopPostsFromTopics = getTopPostsFromTopics;
