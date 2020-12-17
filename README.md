@@ -1,4 +1,6 @@
-# GCA: Gaming Content Aggregator
+# Content King: Content Aggregator
+
+![Content King App](/images/content-king.png)
 
 Created by Edmund Lai
 
@@ -6,10 +8,15 @@ Created by Edmund Lai
 
 To create a website to get relevant content to users based upon their selected interests.
 
-## TODOS
+## How it works
 
-1. Create components that make up the posts portion of the website
-2. Create left menu component that contains categories to select
-3. Refine UI to make it look professional
-4. Create database/persistent storage to allow users to login
-5. Allow user to add categories that they have interests in at user creation
+Uses the Snoowrap library to fetch top posts of each week from various subreddits depending on which categories are selected by the user.
+
+## Frameworks/Tools used
+
+- [React](https://reactjs.org/)
+- [Express](https://expressjs.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [heroku](https://www.heroku.com/)
+- [Material UI](https://material-ui.com/)
+- [snoowrap](https://github.com/not-an-aardvark/snoowrap)
