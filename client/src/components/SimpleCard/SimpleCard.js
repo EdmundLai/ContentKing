@@ -92,18 +92,18 @@ export default function SimpleCard(props) {
 
   return (
     <Card className={classes.root}>
-      <CardContent className={classes.cardContent}>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          <a className={classes.titleLink} href={redditLink}>
+      <a className={classes.titleLink} href={redditLink}>
+        <CardContent className={classes.cardContent}>
+          <Typography
+            className={classes.title}
+            color="textSecondary"
+            gutterBottom
+          >
             {cardTitle}
-          </a>
-        </Typography>
-        {linkContent}
-      </CardContent>
+          </Typography>
+          {linkContent}
+        </CardContent>
+      </a>
     </Card>
   );
 }

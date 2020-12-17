@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
+    paddingBottom: "1rem",
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -58,6 +59,7 @@ export default function SignUp(props) {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [displayError, setDisplayError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -68,18 +70,23 @@ export default function SignUp(props) {
     // console.log(password);
     event.preventDefault();
 
-    const statusObj = await RequestHandler.insertUser(username, password);
-
-    console.log(statusObj);
-
-    if (!statusObj.valid) {
+    if (password !== confirmPassword) {
       setDisplayError(true);
-      setErrorMessage(statusObj.errorMessage);
+      setErrorMessage("Passwords must be the same.");
     } else {
-      logInCallback(username);
-      Cookies.set("username", username, { expires: 7 });
-      //setAppUsername(username);
-      history.push("/topicpicker");
+      const statusObj = await RequestHandler.insertUser(username, password);
+
+      console.log(statusObj);
+
+      if (!statusObj.valid) {
+        setDisplayError(true);
+        setErrorMessage(statusObj.errorMessage);
+      } else {
+        logInCallback(username);
+        Cookies.set("username", username, { expires: 7 });
+        //setAppUsername(username);
+        history.push("/topicpicker");
+      }
     }
   }
 
@@ -89,6 +96,10 @@ export default function SignUp(props) {
 
   function handlePasswordChange(event) {
     setPassword(event.target.value);
+  }
+
+  function handleConfirmPasswordChange(event) {
+    setConfirmPassword(event.target.value);
   }
 
   const formError = displayError ? (
@@ -135,6 +146,20 @@ export default function SignUp(props) {
                 value={password}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="confirmPassword"
+                autoComplete="current-password"
+                onChange={handleConfirmPasswordChange}
+                value={confirmPassword}
+              />
+            </Grid>
           </Grid>
           <Button
             type="submit"
@@ -151,7 +176,6 @@ export default function SignUp(props) {
             </Grid>
           </Grid>
         </form>
-
         {formError}
       </div>
       <Box mt={5}>

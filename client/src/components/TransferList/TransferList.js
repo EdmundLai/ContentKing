@@ -16,6 +16,7 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: "auto",
+    backgroundColor: "#fafafa",
   },
   cardHeader: {
     padding: theme.spacing(1, 2),
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   list: {
     width: 200,
     height: 230,
-    backgroundColor: theme.palette.background.paper,
+
     overflow: "auto",
   },
   button: {

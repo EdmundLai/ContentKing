@@ -5,6 +5,9 @@ import TransferList from "../TransferList/TransferList";
 import ContentTabs from "../ContentTabs/ContentTabs";
 
 import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+
+import { makeStyles } from "@material-ui/core/styles";
 
 import { useHistory } from "react-router-dom";
 
@@ -23,6 +26,19 @@ const RequestHandler = require("../RequestHandler/RequestHandler");
 // remove from database topics that are no longer in chosen list
 // add topics that are newly in chosen list
 // don't touch topics that haven't changed
+
+const useStyles = makeStyles((theme) => ({
+  topicPicker: {
+    flexGrow: 1,
+    width: "100%",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "right",
+    paddingBottom: "2rem",
+  },
+}));
+
 export default function TopicPicker(props) {
   const { username, fetchPosts } = props;
 
@@ -32,6 +48,8 @@ export default function TopicPicker(props) {
   const [originalUserTopics, setOriginalUserTopics] = useState([]);
 
   const history = useHistory();
+
+  const classes = useStyles();
 
   // user subreddits changed by user input via picker
   // this will be passed to transfer list
@@ -201,11 +219,13 @@ export default function TopicPicker(props) {
   });
 
   return (
-    <div className="TopicPicker">
+    <div className={classes.topicPicker}>
       <ContentTabs contentList={content} categoryTitles={categories} />
-      <Button onClick={changeUserTopics} variant="contained" color="primary">
-        Submit
-      </Button>
+      <Container className={classes.buttonContainer}>
+        <Button onClick={changeUserTopics} variant="contained" color="primary">
+          Submit
+        </Button>
+      </Container>
     </div>
   );
 }

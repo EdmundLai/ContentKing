@@ -58,7 +58,7 @@ async function createTables() {
 }
 
 // function works!
-async function insertSampleSubreddits() {
+async function insertSeedSubreddits() {
   // console.log("inside insertSampleSubreddits");
 
   Object.keys(categories).forEach((mainCategory) => {
@@ -70,12 +70,19 @@ async function insertSampleSubreddits() {
       Object.keys(subCategoryObj).forEach(async (topicName) => {
         const subredditName = subCategoryObj[topicName];
 
-        await insertSubreddit(
-          topicName,
-          mainCategory,
-          subCategory,
-          subredditName
-        );
+        const subredditId = await getSubredditIdByTopic(topicName);
+
+        //console.log(subredditId);
+
+        if (typeof subredditId == "undefined") {
+          console.log("Subreddit inserted into database!");
+          await insertSubreddit(
+            topicName,
+            mainCategory,
+            subCategory,
+            subredditName
+          );
+        }
       });
     });
   });
@@ -204,7 +211,11 @@ function getSubredditIdByTopic(topicName) {
     try {
       const res = await pool.query(sql, [topicName]);
       //console.log(res.rows[0].subreddit_id);
-      resolve(res.rows[0].subreddit_id);
+      if (typeof res.rows[0] == "undefined") {
+        resolve(res.rows[0]);
+      } else {
+        resolve(res.rows[0].subreddit_id);
+      }
     } catch (error) {
       reject(error);
     }
@@ -298,6 +309,8 @@ async function registerUser(username, password) {
 }
 
 //module.exports.createTables = createTables;
+
+module.exports.insertSeedSubreddits = insertSeedSubreddits;
 
 module.exports.getUserIdByLogin = getUserIdByLogin;
 
