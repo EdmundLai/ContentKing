@@ -60,8 +60,6 @@ export default function SimpleCard(props) {
   const cardTitle = post.title;
   const cardLink = post.link;
 
-  const redditLink = `https://www.reddit.com${post.permalink}`;
-
   function checkURLIsImg(url) {
     return url.match(/\.(jpeg|jpg|png)$/) != null;
   }
@@ -92,7 +90,7 @@ export default function SimpleCard(props) {
 
   return (
     <Card className={classes.root}>
-      <a className={classes.titleLink} href={redditLink}>
+      <LinkContainer permalink={post.permalink}>
         <CardContent className={classes.cardContent}>
           <Typography
             className={classes.title}
@@ -103,7 +101,32 @@ export default function SimpleCard(props) {
           </Typography>
           {linkContent}
         </CardContent>
-      </a>
+      </LinkContainer>
     </Card>
   );
+}
+
+function LinkContainer(props) {
+  const classes = useStyles();
+
+  const { permalink } = props;
+
+  let redditLink = "";
+
+  let linkActive = false;
+
+  if (typeof permalink !== "undefined") {
+    redditLink = `https://www.reddit.com${permalink}`;
+    linkActive = true;
+  }
+
+  if (linkActive) {
+    return (
+      <a className={classes.titleLink} href={redditLink}>
+        {props.children}
+      </a>
+    );
+  }
+
+  return <>{props.children}</>;
 }
