@@ -3,6 +3,7 @@ version: "3.7"
 services:
   backend:
     build: ./backend
+    image: edmundlai/content-agg-backend:latest
     env_file:
       - ./backend/.env
     ports:
@@ -10,5 +11,6 @@ services:
 
   client:
     build: ./client
+    image: edmundlai/content-agg-client:latest
     ports:
       - 3000:3000

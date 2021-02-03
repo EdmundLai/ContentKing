@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node
 ENV NODE_ENV=production
 
 WORKDIR /app/backend
